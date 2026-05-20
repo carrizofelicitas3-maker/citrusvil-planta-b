@@ -3,278 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citrusvil - Lógica de Llenado Planta B</title>
+    <title>Citrusvil S.A. - Control de Llenado Planta B</title>
     <style>
         :root {
-            --primary: #005A36; /* Verde Citrusvil */
-            --secondary: #78B833;
-            --dark: #222222;
-            --light: #F4F7F5;
-            --accent: #E5A93C;
+            --citrus-dark: #005A36;
+            --citrus-light: #78B833;
+            --neutral-dark: #2D3748;
+            --bg-canvas: #EDF2F7;
+            --juice-color: #D69E2E;
+            --nfc-color: #DD6B20;
+            --inter-color: #3182CE;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light);
-            color: var(--dark);
+            background-color: var(--bg-canvas);
+            color: var(--neutral-dark);
             margin: 0;
             padding: 20px;
         }
-
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        header h1 { margin: 0; font-size: 24px; }
-        header p { margin: 5px 0 0 0; opacity: 0.9; }
-
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 20px;
+        .panel {
             max-width: 1200px;
             margin: 0 auto;
         }
-
-        .panel-control {
+        .main-header {
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            height: fit-content;
-        }
-
-        .panel-control h3 { margin-top: 0; color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 8px;}
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        select, button {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-
-        button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        button:hover { background-color: var(--secondary); }
-
-        .layout-plantas {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .block-camaras {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--primary);
-        }
-
-        .block-title {
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-
-        .grid-camaras {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
-        .camara {
-            border: 2px solid #ddd;
-            padding: 15px;
             border-radius: 6px;
-            text-align: center;
-            background-color: #fafafa;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--citrus-dark);
+            margin-bottom: 25px;
         }
-
-        .camara h4 { margin: 0 0 5px 0; color: #555; }
-        .camara p { margin: 0; font-size: 12px; color: #888; }
-
-        /* Estados de Resaltado */
-        .active-target {
-            border-color: var(--secondary);
-            background-color: #E8F5E9;
-            transform: scale(1.03);
-            box-shadow: 0 4px 8px rgba(120, 184, 51, 0.3);
+        .main-header h1 { margin: 0; font-size: 22px; color: var(--citrus-dark); text-transform: uppercase; }
+        .main-header p { margin: 5px 0 0 0; font-size: 13px; color: #4A5568; font-style: italic; }
+        
+        .block-card {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            margin-bottom: 20px;
+            border: 1px solid #E2E8F0;
+            overflow: hidden;
         }
-        .active-target h4 { color: var(--primary); font-weight: bold; }
-
-        .disabled-cam {
-            background-color: #eee;
-            color: #999;
-            border-style: dashed;
+        .block-header {
+            background-color: var(--citrus-dark);
+            color: white;
+            padding: 12px 18px;
+            font-weight: bold;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-
-        .resultado-texto {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #eef7f2;
-            border-left: 4px solid var(--primary);
-            font-weight: 500;
-            display: none;
+        .tag-precamara {
+            background-color: var(--citrus-light);
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
         }
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+        .camara-box {
+            border: 1px solid #E2E8F0;
+            border-radius: 4px;
+            padding: 15px;
+            background: white;
+            border-top: 4px solid #CBD5E0;
+        }
+        .camara-box.nfc-zone { border-top-color: var(--nfc-color); }
+        .camara-box.juice-zone { border-top-color: var(--juice-color); }
+        .camara-box.inter-zone { border-top-color: var(--inter-color); }
+        
+        .camara-box.disabled {
+            background-color: #F7FAFC;
+            opacity: 0.6;
+            border-top-color: #E2E8F0;
+        }
+        .camara-box.disabled .title { color: #A0AEC0; }
+        
+        .title { font-weight: bold; font-size: 15px; color: var(--citrus-dark); margin-bottom: 6px; }
+        
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .badge-juice { background-color: #FEFCBF; color: #744210; }
+        .badge-nfc { background-color: #FEEBC8; color: #7B341E; }
+        .badge-inter { background-color: #EBF8FF; color: #2B6CB0; }
+        .badge-off { background-color: #EDF2F7; color: #4A5568; }
+
+        .info-text { font-size: 12px; color: #4A5568; line-height: 1.4; }
+        .cycle-text { margin-top: 8px; font-size: 11px; font-weight: bold; color: #1A202C; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>CITRUSVIL – Gestión de Stock Inteligente</h1>
-        <p>Lógica de Llenado Planta B (Distribución Eficiente de Cámaras)</p>
-    </header>
+<div class="panel">
+    <div class="main-header">
+        <h1>Circuito Unificado Control Asíncrono — Planta B</h1>
+        <p>Logística de asignación con integración de flujos de Producción Propia e Interplanta</p>
+    </div>
 
-    <div class="container">
-        <div class="panel-control">
-            <h3>Asignador de Destino</h3>
-            <div class="form-group">
-                <label for="origen">Origen del Lote:</label>
-                <select id="origen" onchange="evaluarOrigen()">
-                    <option value="produccion">Producción Propia (Planta B - Caliente)</option>
-                    <option value="interplanta">Interplanta (Planta A - Ya Frío)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="jugo">Tipo de Material:</label>
-                <select id="jugo">
-                    <option value="nfc_pulpa">JUGO NFC / PULPA</option>
-                    <option value="turbio">JUGO TURBIO</option>
-                    <option value="clarificado">JUGO CLARIFICADO</option>
-                </select>
-            </div>
-            <div class="form-group" id="grupo-dia">
-                <label for="dia">Día del Cronograma:</label>
-                <select id="dia">
-                    <option value="1">Día 1 (Lote Impar)</option>
-                    <option value="2">Día 2 (Lote Par)</option>
-                </select>
-            </div>
-            <button onclick="calcularDestino()">Calcular Cámara de Destino</button>
-            <div id="resultado" class="resultado-texto"></div>
+    <div class="block-card">
+        <div class="block-header">
+            BLOCK 1: Destino Diario de Producción y Co-Asignación Interplanta <span class="tag-precamara">Precámara 1</span>
         </div>
-
-        <div class="layout-plantas">
-            <div class="block-camaras">
-                <div class="block-title">BLOCK 1: Despacho Consolidado e Interplanta</div>
-                <div class="grid-camaras">
-                    <div class="camara" id="cam1"><h4>Cámara 1</h4><p>NFC / Pulpa<br>(Día 1)</p></div>
-                    <div class="camara" id="cam2"><h4>Cámara 2</h4><p>NFC / Pulpa<br>(Día 2)</p></div>
-                    <div class="camara" id="cam3"><h4>Cámara 3</h4><p>Interplanta<br>Turbio (A)</p></div>
-                    <div class="camara" id="cam4"><h4>Cámara 4</h4><p>Interplanta<br>Clarificado (A)</p></div>
-                </div>
+        <div class="grid-layout">
+            <div class="camara-box nfc-zone">
+                <div class="title">Cámara 1</div>
+                <span class="badge badge-nfc">NFC / Pulpa</span>
+                <div class="info-text">Recibe la producción del día B. <b>Interplanta A de NFC/Pulpa ingresa aquí si coincide el día.</b></div>
+                <div class="cycle-text">🔄 Activa: DÍA 0 / DÍA 3</div>
             </div>
-
-            <div class="block-camaras">
-                <div class="block-title">BLOCK 2: Goteo Diario Planta B (Maduración)</div>
-                <div class="grid-camaras">
-                    <div class="camara" id="cam5"><h4>Cámara 5</h4><p>Turbio B<br>(Día 1)</p></div>
-                    <div class="camara" id="cam6"><h4>Cámara 6</h4><p>Turbio B<br>(Día 2)</p></div>
-                    <div class="camara" id="cam7"><h4>Cámara 7</h4><p>Clarificado B<br>(Día 1)</p></div>
-                    <div class="camara" id="cam8"><h4>Cámara 8</h4><p>Clarificado B<br>(Día 2)</p></div>
-                </div>
+            <div class="camara-box nfc-zone">
+                <div class="title">Cámara 2</div>
+                <span class="badge badge-nfc">NFC / Pulpa</span>
+                <div class="info-text">Recibe la producción del día B. <b>Interplanta A de NFC/Pulpa ingresa aquí si coincide el día.</b></div>
+                <div class="cycle-text">🔄 Activa: DÍA 1 / DÍA 4</div>
             </div>
-
-            <div class="block-camaras">
-                <div class="block-title">BLOCK 3: Pulmón de Seguridad (5 Cámaras Libres / Reserva)</div>
-                <div class="grid-camaras">
-                    <div class="camara disabled-cam" id="cam9"><h4>Cámara 9</h4><p>Pulmón Libre</p></div>
-                    <div class="camara disabled-cam" id="cam10"><h4>Cámara 10</h4><p>Pulmón Libre</p></div>
-                    <div class="camara disabled-cam" id="cam11"><h4>Cámara 11</h4><p>Reserva Vacía</p></div>
-                    <div class="camara disabled-cam" id="cam12"><h4>Cámara 12</h4><p>Reserva Vacía</p></div>
-                </div>
+            <div class="camara-box nfc-zone">
+                <div class="title">Cámara 3</div>
+                <span class="badge badge-nfc">NFC / Pulpa</span>
+                <div class="cam-info">Recibe la producción del día B. <b>Interplanta A de NFC/Pulpa ingresa aquí si coincide el día.</b></div>
+                <div class="cycle-text">🔄 Activa: DÍA 2</div>
+            </div>
+            <div class="camara-box juice-zone">
+                <div class="title">Cámara 4</div>
+                <span class="badge badge-juice">Jugo Turbio / Claro</span>
+                <div class="info-text">Captura exclusiva del goteo diario de jugos propios de Planta B.</div>
+                <div class="cycle-text">🔄 Activa: DÍA 0 / DÍA 4</div>
             </div>
         </div>
     </div>
 
-    <script>
-        function evaluarOrigen() {
-            const origen = document.getElementById('origen').value;
-            const grupoDia = document.getElementById('grupo-dia');
-            const jugoSelect = document.getElementById('jugo');
-            
-            if (origen === 'interplanta') {
-                grupoDia.style.display = 'none';
-                // Planta A no produce NFC/Pulpa según el flujo de transición
-                if(jugoSelect.value === 'nfc_pulpa') {
-                    jugoSelect.value = 'turbio';
-                }
-                jugoSelect.options[0].disabled = true;
-            } else {
-                grupoDia.style.display = 'block';
-                jugoSelect.options[0].disabled = false;
-            }
-        }
+    <div class="block-card">
+        <div class="block-header">
+            BLOCK 2: Módulos de Hermeticidad y Maduración Estanca <span class="tag-precamara">Precámara 2</span>
+        </div>
+        <div class="grid-layout">
+            <div class="camara-box juice-zone">
+                <div class="title">Cámara 5</div>
+                <span class="badge badge-juice">Maduración Jugos</span>
+                <div class="info-text">Recibe los jugos propios acumulados. Cierre estanco y hermético posterior.</div>
+                <div class="cycle-text">🔒 Activa para Ingreso: DÍA 1</div>
+            </div>
+            <div class="camara-box juice-zone">
+                <div class="title">Cámara 6</div>
+                <span class="badge badge-juice">Maduración Jugos</span>
+                <div class="info-text">Recibe los jugos propios acumulados. Cierre estanco y hermético posterior.</div>
+                <div class="cycle-text">🔒 Activa para Ingreso: DÍA 2</div>
+            </div>
+            <div class="camara-box juice-zone">
+                <div class="title">Cámara 7</div>
+                <span class="badge badge-juice">Maduración Jugos</span>
+                <div class="info-text">Recibe los jugos propios acumulados. Cierre estanco y hermético posterior.</div>
+                <div class="cycle-text">🔒 Activa para Ingreso: DÍA 3</div>
+            </div>
+            <div class="camara-box disabled">
+                <div class="title">Cámara 8</div>
+                <span class="badge badge-off">Apagada</span>
+                <div class="info-text">Reserva pasiva del bloque. Permanece apagada hasta saturación por picos de campaña.</div>
+                <div class="cycle-text">🚫 Fuera de Ciclo</div>
+            </div>
+        </div>
+    </div>
 
-        function calcularDestino() {
-            // Limpiar estados anteriores
-            document.querySelectorAll('.camara').forEach(c => c.classList.remove('active-target'));
-            
-            const origen = document.getElementById('origen').value;
-            const jugo = document.getElementById('jugo').value;
-            const dia = document.getElementById('dia').value;
-            
-            let camaraDestino = '';
-            let explicacion = '';
+    <div class="block-card">
+        <div class="block-header">
+            BLOCK 3: Hub Exclusivo Interplanta A y Contingencia Energética <span class="tag-precamara">Precámara 3</span>
+        </div>
+        <div class="grid-layout">
+            <div class="camara-box inter-zone">
+                <div class="title">Cámara 9</div>
+                <span class="badge badge-inter">Interplanta A</span>
+                <div class="info-text"><b>Filtro Exclusivo:</b> Recibe únicamente Jugo Turbio y Claro ya congelados provenientes de Planta A.</div>
+                <div class="cycle-text">📥 Ingreso continuo según arribo</div>
+            </div>
+            <div class="camara-box disabled">
+                <div class="title">Cámara 10</div>
+                <span class="badge badge-off">Apagada</span>
+                <div class="info-text">Módulo en gris. Se enciende secuencialmente por saturación crítica de stock en sistema.</div>
+                <div class="cycle-text">⚠ Alerta SAP</div>
+            </div>
+            <div class="camara-box disabled">
+                <div class="title">Cámara 11</div>
+                <span class="badge badge-off">Apagada</span>
+                <div class="info-text">Módulo en gris. Se enciende secuencialmente por saturación crítica de stock en sistema.</div>
+                <div class="cycle-text">⚠ Alerta SAP</div>
+            </div>
+            <div class="camara-box disabled">
+                <div class="title">Cámara 12</div>
+                <span class="badge badge-off">Apagada</span>
+                <div class="info-text">Módulo en gris. Se enciende secuencialmente por saturación crítica de stock en sistema.</div>
+                <div class="cycle-text">⚠ Alerta SAP</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-            if (origen === 'interplanta') {
-                if (jugo === 'turbio') {
-                    camaraDestino = 'cam3';
-                    explicacion = "Asignar a Cámara 3 (Block 1). El lote de Turbio ya viene frío de Planta A; se ubica directo en la zona de despacho.";
-                } else if (jugo === 'clarificado') {
-                    camaraDestino = 'cam4';
-                    explicacion = "Asignar a Cámara 4 (Block 1). El lote de Clarificado ya viene frío de Planta A; listo para consolidar despachos.";
-                }
-            } else { // Producción Propia Planta B
-                if (jugo === 'nfc_pulpa') {
-                    camaraDestino = (dia === '1') ? 'cam1' : 'cam2';
-                    explicacion = `Asignar a Cámara ${dia === '1' ? '1' : '2'} (Block 1). Producción del Día ${dia}. Mantiene la puerta melliza cerrada protegiendo el lote anterior.`;
-                } else if (jugo === 'turbio') {
-                    camaraDestino = (dia === '1') ? 'cam5' : 'cam6';
-                    explicacion = `Asignar a Cámara ${dia === '1' ? '5' : '6'} (Block 2). Goteo de Turbio Caliente del Día ${dia}. No interfiere con el stock maduro.`;
-                } else if (jugo === 'clarificado') {
-                    camaraDestino = (dia === '1') ? 'cam7' : 'cam8';
-                    explicacion = `Asignar a Cámara ${dia === '1' ? '7' : '8'} (Block 2). Clarificado en proceso de maduración estricta del Día ${dia}.`;
-                }
-            }
-
-            // Aplicar UI cambios
-            if (camaraDestino) {
-                const elemento = document.getElementById(camaraDestino);
-                elemento.classList.add('active-target');
-                
-                const txtResultado = document.getElementById('resultado');
-                txtResultado.style.display = 'block';
-                txtResultado.innerHTML = `<strong>Destino Recomendado:</strong> ${explicacion}`;
-            }
-        }
-    </script>
 </body>
 </html>
