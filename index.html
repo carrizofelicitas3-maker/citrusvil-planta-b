@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citrusvil S.A. - Control de Cámaras Planta B</title>
+    <title>Logística de Stock Unificada — Planta B</title>
     <style>
         :root {
             --citrus-dark: #005A36;
             --citrus-light: #78B833;
-            --neutral-dark: #1E293B;
+            --neutral-dark: #0F172A;
             --bg-canvas: #F8FAFC;
             --juice-color: #D69E2E;
             --nfc-color: #DD6B20;
@@ -85,10 +85,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.2s ease;
         }
         
-        /* Estados Visuales Sintéticos */
+        /* Estados de Ruteo */
         .camara.status-open-nfc { border-left: 5px solid var(--nfc-color); background-color: #FFFBF8; }
         .camara.status-open-juice { border-left: 5px solid var(--juice-color); background-color: #FFFDF5; }
         .camara.status-open-inter { border-left: 5px solid var(--inter-color); background-color: #F0F8FF; }
@@ -98,7 +97,7 @@
         .cam-num { font-weight: bold; font-size: 15px; color: #0F172A; }
         
         .badge {
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 4px;
             font-size: 10px;
             font-weight: bold;
@@ -120,114 +119,11 @@
             <p>Simulador en tiempo real del ruteo dinámico Citrusvil</p>
         </div>
         <div class="control-box">
-            DÍA OPERATIVO Semanal:
+            DÍA OPERATIVO:
             <select id="daySelector" onchange="updateSimulation()">
                 <option value="0">Lunes (Día 0)</option>
                 <option value="1">Martes (Día 1)</option>
                 <option value="2">Miércoles (Día 2)</option>
                 <option value="3">Jueves (Día 3)</option>
                 <option value="4">Viernes (Día 4)</option>
-                <option value="5">Sábado (Día 5) — Alerta Espacio</option>
-                <option value="6">Domingo (Día 6) — Alerta Espacio</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="block-card">
-        <div class="block-header">BLOCK 1: AMBAS (PRODUCCIÓN E INTERPLANTA)</div>
-        <div class="grid-camaras">
-            <div class="camara" id="cam1"><div class="cam-num">Cámara 1</div><span class="badge" id="b1"></span></div>
-            <div class="camara" id="cam2"><div class="cam-num">Cámara 2</div><span class="badge" id="b2"></span></div>
-            <div class="camara" id="cam3"><div class="cam-num">Cámara 3</div><span class="badge" id="b3"></span></div>
-            <div class="camara" id="cam4"><div class="cam-num">Cámara 4</div><span class="badge" id="b4"></span></div>
-        </div>
-    </div>
-
-    <div class="block-card">
-        <div class="block-header">BLOCK 2: PRODUCCIÓN DIARIA</div>
-        <div class="grid-camaras">
-            <div class="camara" id="cam5"><div class="cam-num">Cámara 5</div><span class="badge" id="b5"></span></div>
-            <div class="camara" id="cam6"><div class="cam-num">Cámara 6</div><span class="badge" id="b6"></span></div>
-            <div class="camara" id="cam7"><div class="cam-num">Cámara 7</div><span class="badge" id="b7"></span></div>
-            <div class="camara" id="cam8"><div class="cam-num">Cámara 8</div><span class="badge" id="b8"></span></div>
-        </div>
-    </div>
-
-    <div class="block-card">
-        <div class="block-header">BLOCK 3: INTERPLANTA</div>
-        <div class="grid-camaras">
-            <div class="camara" id="cam9"><div class="cam-num">Cámara 9</div><span class="badge" id="b9"></span></div>
-            <div class="camara" id="cam10"><div class="cam-num">Cámara 10</div><span class="badge" id="b10"></span></div>
-            <div class="camara" id="cam11"><div class="cam-num">Cámara 11</div><span class="badge" id="b11"></span></div>
-            <div class="camara" id="cam12"><div class="cam-num">Cámara 12</div><span class="badge" id="b12"></span></div>
-        </div>
-    </div>
-</div>
-
-<script>
-    function updateSimulation() {
-        const day = parseInt(document.getElementById('daySelector').value);
-        
-        // 1. Resetear Cámaras de Trabajo a Herméticas (C1 a C7)
-        for(let i=1; i<=7; i++) {
-            document.getElementById('cam' + i).className = 'camara status-sealed';
-            const b = document.getElementById('b' + i);
-            b.className = 'badge badge-sealed';
-            b.innerText = 'Hermética';
-        }
-
-        // 2. Resetear Cámaras de Reserva Activa a Apagadas (C8, C10, C11, C12)
-        const reservas = [8, 10, 11, 12];
-        reservas.forEach(num => {
-            document.getElementById('cam' + num).className = 'camara status-off';
-            const b = document.getElementById('b' + num);
-            b.className = 'badge badge-off';
-            b.innerText = 'Apagada';
-        });
-
-        // 3. Fijar canal continuo de Interplanta en Cámara 9
-        document.getElementById('cam9').className = 'camara status-open-inter';
-        const b9 = document.getElementById('b9');
-        b9.className = 'badge badge-inter';
-        b9.innerText = 'Recepción Jugo A';
-
-        // ================= ASIGNACIÓN ALGORÍTMICA DINÁMICA =================
-        
-        // Flujo NFC / Pulpa (Rotación de 3 días)
-        const nfcRoute = day % 3;
-        const targetNFC = document.getElementById('cam' + (nfcRoute + 1));
-        const badgeNFC = document.getElementById('b' + (nfcRoute + 1));
-        targetNFC.className = 'camara status-open-nfc';
-        badgeNFC.className = 'badge badge-nfc';
-        badgeNFC.innerText = 'Recepción NFC';
-
-        // Flujo Jugo Propio Planta B (Rotación de 4 cámaras: C4, C5, C6, C7)
-        const juiceRoute = day % 4;
-        const targetJuiceNum = juiceRoute === 0 ? 4 : (juiceRoute + 4);
-        const targetJuice = document.getElementById('cam' + targetJuiceNum);
-        const badgeJuice = document.getElementById('b' + targetJuiceNum);
-        targetJuice.className = 'camara status-open-juice';
-        badgeJuice.className = 'badge badge-juice';
-        badgeJuice.innerText = 'Recepción Jugo B';
-
-        // ================= SIMULACIÓN DE CONTINGENCIA POR FALTA DE ESPACIO =================
-        if (day === 5) { // Sábado: Sobrecarga en Producción Diaria activa Cámara 8
-            const c8 = document.getElementById('cam8');
-            const b8 = document.getElementById('b8');
-            c8.className = 'camara status-open-juice';
-            b8.className = 'badge badge-juice';
-            b8.innerText = 'Reserva Activa';
-        }
-        if (day === 6) { // Domingo: Saturación por arribos de Interplanta activa Cámara 10
-            const c10 = document.getElementById('cam10');
-            const b10 = document.getElementById('b10');
-            c10.className = 'camara status-open-inter';
-            b10.className = 'badge badge-inter';
-            b10.innerText = 'Reserva Activa';
-        }
-    }
-    updateSimulation();
-</script>
-
-</body>
-</html>
+                <option value="5">S
