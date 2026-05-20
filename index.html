@@ -3,43 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citrusvil S.A. - Control de Llenado Planta B</title>
+    <title>Citrusvil S.A. - Sistema Unificado Dinámico de Cámaras</title>
     <style>
         :root {
             --citrus-dark: #005A36;
             --citrus-light: #78B833;
             --neutral-dark: #2D3748;
-            --bg-canvas: #EDF2F7;
+            --bg-canvas: #F4F7F4;
             --juice-color: #D69E2E;
             --nfc-color: #DD6B20;
             --inter-color: #3182CE;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background-color: var(--bg-canvas);
             color: var(--neutral-dark);
             margin: 0;
             padding: 20px;
         }
-        .panel {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .main-header {
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .header-panel {
             background: white;
             padding: 20px;
-            border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             border-left: 6px solid var(--citrus-dark);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .main-header h1 { margin: 0; font-size: 22px; color: var(--citrus-dark); text-transform: uppercase; }
-        .main-header p { margin: 5px 0 0 0; font-size: 13px; color: #4A5568; font-style: italic; }
+        .header-panel h1 { margin: 0; font-size: 22px; color: var(--citrus-dark); text-transform: uppercase; }
         
+        .control-box {
+            background: #EDF2F7;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .control-box select {
+            padding: 5px 10px;
+            margin-left: 10px;
+            border-radius: 4px;
+            border: 1px solid #CBD5E0;
+        }
+
         .block-card {
             background: white;
             border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
             margin-bottom: 20px;
             border: 1px solid #E2E8F0;
             overflow: hidden;
@@ -49,43 +62,41 @@
             color: white;
             padding: 12px 18px;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 14px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
-        .tag-precamara {
-            background-color: var(--citrus-light);
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-        .grid-layout {
+        .grid-camaras {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 15px;
             padding: 20px;
         }
-        .camara-box {
+        .camara {
             border: 1px solid #E2E8F0;
-            border-radius: 4px;
+            border-radius: 6px;
             padding: 15px;
-            background: white;
-            border-top: 4px solid #CBD5E0;
+            position: relative;
+            background: #FFFFFF;
+            transition: all 0.3s ease;
         }
-        .camara-box.nfc-zone { border-top-color: var(--nfc-color); }
-        .camara-box.juice-zone { border-top-color: var(--juice-color); }
-        .camara-box.inter-zone { border-top-color: var(--inter-color); }
         
-        .camara-box.disabled {
-            background-color: #F7FAFC;
-            opacity: 0.6;
-            border-top-color: #E2E8F0;
+        /* Estados Dinámicos mediante Clases */
+        .camara.status-open {
+            border: 2px solid var(--citrus-light);
+            background-color: #F0FFF4;
+            box-shadow: 0 0 12px rgba(120, 184, 51, 0.2);
         }
-        .camara-box.disabled .title { color: #A0AEC0; }
-        
-        .title { font-weight: bold; font-size: 15px; color: var(--citrus-dark); margin-bottom: 6px; }
+        .camara.status-sealed {
+            border-left: 4px solid #A0AEC0;
+            background-color: #FAFAFA;
+        }
+        .camara.status-off {
+            background-color: #EDF2F7;
+            opacity: 0.5;
+        }
+
+        .cam-num { font-weight: bold; font-size: 16px; color: var(--citrus-dark); margin-bottom: 5px; }
         
         .badge {
             display: inline-block;
@@ -99,116 +110,164 @@
         .badge-juice { background-color: #FEFCBF; color: #744210; }
         .badge-nfc { background-color: #FEEBC8; color: #7B341E; }
         .badge-inter { background-color: #EBF8FF; color: #2B6CB0; }
-        .badge-off { background-color: #EDF2F7; color: #4A5568; }
+        .badge-off { background-color: #E2E8F0; color: #4A5568; }
 
-        .info-text { font-size: 12px; color: #4A5568; line-height: 1.4; }
-        .cycle-text { margin-top: 8px; font-size: 11px; font-weight: bold; color: #1A202C; }
+        .live-status {
+            font-weight: bold;
+            font-size: 11px;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+        .status-open .live-status { color: #38A169; }
+        .status-sealed .live-status { color: #4A5568; }
+        
+        .desc { font-size: 12px; color: #4A5568; line-height: 1.4; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-<div class="panel">
-    <div class="main-header">
-        <h1>Circuito Unificado Control Asíncrono — Planta B</h1>
-        <p>Logística de asignación con integración de flujos de Producción Propia e Interplanta</p>
-    </div>
-
-    <div class="block-card">
-        <div class="block-header">
-            BLOCK 1: Destino Diario de Producción y Co-Asignación Interplanta <span class="tag-precamara">Precámara 1</span>
+<div class="container">
+    <div class="header-panel">
+        <div>
+            <h1>Logística de Stock Unificada — Planta B</h1>
+            <p style="margin:4px 0 0 0; font-size:13px; color:#718096;">Simulador en tiempo real del ruteo dinámico Citrusvil</p>
         </div>
-        <div class="grid-layout">
-            <div class="camara-box nfc-zone">
-                <div class="title">Cámara 1</div>
-                <span class="badge badge-nfc">NFC / Pulpa</span>
-                <div class="info-text">Recibe la producción del día B. <b>Interplanta A de NFC/Pulpa ingresa aquí si coincide el día.</b></div>
-                <div class="cycle-text">🔄 Activa: DÍA 0 / DÍA 3</div>
-            </div>
-            <div class="camara-box nfc-zone">
-                <div class="title">Cámara 2</div>
-                <span class="badge badge-nfc">NFC / Pulpa</span>
-                <div class="info-text">Recibe la producción del día B. <b>Interplanta A de NFC/Pulpa ingresa aquí si coincide el día.</b></div>
-                <div class="cycle-text">🔄 Activa: DÍA 1 / DÍA 4</div>
-            </div>
-            <div class="camara-box nfc-zone">
-                <div class="title">Cámara 3</div>
-                <span class="badge badge-nfc">NFC / Pulpa</span>
-                <div class="cam-info">Recibe la producción del día B. <b>Interplanta A de NFC/Pulpa ingresa aquí si coincide el día.</b></div>
-                <div class="cycle-text">🔄 Activa: DÍA 2</div>
-            </div>
-            <div class="camara-box juice-zone">
-                <div class="title">Cámara 4</div>
-                <span class="badge badge-juice">Jugo Turbio / Claro</span>
-                <div class="info-text">Captura exclusiva del goteo diario de jugos propios de Planta B.</div>
-                <div class="cycle-text">🔄 Activa: DÍA 0 / DÍA 4</div>
-            </div>
+        <div class="control-box">
+            Simular Día Operativo:
+            <select id="daySelector" onchange="updateSimulation()">
+                <option value="0">DÍA 0 (Inicio de Ciclos)</option>
+                <option value="1">DÍA 1</option>
+                <option value="2">DÍA 2</option>
+                <option value="3">DÍA 3 (Reinicio NFC)</option>
+                <option value="4">DÍA 4 (Reinicio Jugo)</option>
+            </select>
         </div>
     </div>
 
     <div class="block-card">
-        <div class="block-header">
-            BLOCK 2: Módulos de Hermeticidad y Maduración Estanca <span class="tag-precamara">Precámara 2</span>
-        </div>
-        <div class="grid-layout">
-            <div class="camara-box juice-zone">
-                <div class="title">Cámara 5</div>
-                <span class="badge badge-juice">Maduración Jugos</span>
-                <div class="info-text">Recibe los jugos propios acumulados. Cierre estanco y hermético posterior.</div>
-                <div class="cycle-text">🔒 Activa para Ingreso: DÍA 1</div>
+        <div class="block-header">BLOCK 1: Recepción Diaria e Interplanta Consolidada <span>Precámara 1</span></div>
+        <div class="grid-camaras">
+            <div class="camara" id="cam1">
+                <div class="cam-num">Cámara 1</div>
+                <span class="badge badge-nfc">NFC / Pulpa</span>
+                <div class="desc">Recibe producción propia B e Interplanta A de estos productos.</div>
+                <div class="live-status" id="state-cam1">Hermética 🔒</div>
             </div>
-            <div class="camara-box juice-zone">
-                <div class="title">Cámara 6</div>
-                <span class="badge badge-juice">Maduración Jugos</span>
-                <div class="info-text">Recibe los jugos propios acumulados. Cierre estanco y hermético posterior.</div>
-                <div class="cycle-text">🔒 Activa para Ingreso: DÍA 2</div>
+            <div class="camara" id="cam2">
+                <div class="cam-num">Cámara 2</div>
+                <span class="badge badge-nfc">NFC / Pulpa</span>
+                <div class="desc">Recibe producción propia B e Interplanta A de estos productos.</div>
+                <div class="live-status" id="state-cam2">Hermética 🔒</div>
             </div>
-            <div class="camara-box juice-zone">
-                <div class="title">Cámara 7</div>
-                <span class="badge badge-juice">Maduración Jugos</span>
-                <div class="info-text">Recibe los jugos propios acumulados. Cierre estanco y hermético posterior.</div>
-                <div class="cycle-text">🔒 Activa para Ingreso: DÍA 3</div>
+            <div class="camara" id="cam3">
+                <div class="cam-num">Cámara 3</div>
+                <span class="badge badge-nfc">NFC / Pulpa</span>
+                <div class="desc">Recibe producción propia B e Interplanta A de estos productos.</div>
+                <div class="live-status" id="state-cam3">Hermética 🔒</div>
             </div>
-            <div class="camara-box disabled">
-                <div class="title">Cámara 8</div>
-                <span class="badge badge-off">Apagada</span>
-                <div class="info-text">Reserva pasiva del bloque. Permanece apagada hasta saturación por picos de campaña.</div>
-                <div class="cycle-text">🚫 Fuera de Ciclo</div>
+            <div class="camara" id="cam4">
+                <div class="cam-num">Cámara 4</div>
+                <span class="badge badge-juice">Jugo Propio B</span>
+                <div class="desc">Captura inicial del goteo continuo de Jugo Turbio y Claro de Planta B.</div>
+                <div class="live-status" id="state-cam4">Hermética 🔒</div>
             </div>
         </div>
     </div>
 
     <div class="block-card">
-        <div class="block-header">
-            BLOCK 3: Hub Exclusivo Interplanta A y Contingencia Energética <span class="tag-precamara">Precámara 3</span>
+        <div class="block-header">BLOCK 2: Módulos de Estabilización Térmica Estanca <span>Precámara 2</span></div>
+        <div class="grid-camaras">
+            <div class="camara" id="cam5">
+                <div class="cam-num">Cámara 5</div>
+                <span class="badge badge-juice">Jugo Propio B</span>
+                <div class="desc">Almacenamiento exclusivo para goteo diferido de jugos de Planta B.</div>
+                <div class="live-status" id="state-cam5">Hermética 🔒</div>
+            </div>
+            <div class="camara" id="cam6">
+                <div class="cam-num">Cámara 6</div>
+                <span class="badge badge-juice">Jugo Propio B</span>
+                <div class="desc">Almacenamiento exclusivo para goteo diferido de jugos de Planta B.</div>
+                <div class="live-status" id="state-cam6">Hermética 🔒</div>
+            </div>
+            <div class="camara" id="cam7">
+                <div class="cam-num">Cámara 7</div>
+                <span class="badge badge-juice">Jugo Propio B</span>
+                <div class="desc">Almacenamiento exclusivo para goteo diferido de jugos de Planta B.</div>
+                <div class="live-status" id="state-cam7">Hermética 🔒</div>
+            </div>
+            <div class="camara status-off">
+                <div class="cam-num">Cámara 8</div>
+                <span class="badge badge-off">Apagada</span>
+                <div class="desc">Reserva pasiva de ahorro energético. Se activa solo por saturación.</div>
+                <div class="live-status">Inactiva 🚫</div>
+            </div>
         </div>
-        <div class="grid-layout">
-            <div class="camara-box inter-zone">
-                <div class="title">Cámara 9</div>
-                <span class="badge badge-inter">Interplanta A</span>
-                <div class="info-text"><b>Filtro Exclusivo:</b> Recibe únicamente Jugo Turbio y Claro ya congelados provenientes de Planta A.</div>
-                <div class="cycle-text">📥 Ingreso continuo según arribo</div>
+    </div>
+
+    <div class="block-card">
+        <div class="block-header">BLOCK 3: Hub Dedicado Interplanta A y Contingencias <span>Precámara 3</span></div>
+        <div class="grid-camaras">
+            <div class="camara status-open" style="border-color: var(--inter-color);">
+                <div class="cam-num">Cámara 9</div>
+                <span class="badge badge-inter" style="background-color:#EBF8FF; color:#2B6CB0;">Filtro Interplanta</span>
+                <div class="desc"><b>Canal Abierto Siempre:</b> Recibe todo el Jugo Turbio/Claro congelado de Planta A.</div>
+                <div class="live-status" style="color: var(--inter-color);">Recibiendo Arribos 📥</div>
             </div>
-            <div class="camara-box disabled">
-                <div class="title">Cámara 10</div>
+            <div class="camara status-off">
+                <div class="cam-num">Cámara 10</div>
                 <span class="badge badge-off">Apagada</span>
-                <div class="info-text">Módulo en gris. Se enciende secuencialmente por saturación crítica de stock en sistema.</div>
-                <div class="cycle-text">⚠ Alerta SAP</div>
+                <div class="desc">Módulo en gris. Reserva por saturación de stock.</div>
+                <div class="live-status">Inactiva 🚫</div>
             </div>
-            <div class="camara-box disabled">
-                <div class="title">Cámara 11</div>
+            <div class="camara status-off">
+                <div class="cam-num">Cámara 11</div>
                 <span class="badge badge-off">Apagada</span>
-                <div class="info-text">Módulo en gris. Se enciende secuencialmente por saturación crítica de stock en sistema.</div>
-                <div class="cycle-text">⚠ Alerta SAP</div>
+                <div class="desc">Módulo en gris. Reserva por saturación de stock.</div>
+                <div class="live-status">Inactiva 🚫</div>
             </div>
-            <div class="camara-box disabled">
-                <div class="title">Cámara 12</div>
+            <div class="camara status-off">
+                <div class="cam-num">Cámara 12</div>
                 <span class="badge badge-off">Apagada</span>
-                <div class="info-text">Módulo en gris. Se enciende secuencialmente por saturación crítica de stock en sistema.</div>
-                <div class="cycle-text">⚠ Alerta SAP</div>
+                <div class="desc">Módulo en gris. Reserva por saturación de stock.</div>
+                <div class="live-status">Inactiva 🚫</div>
             </div>
         </div>
     </div>
 </div>
 
-</body>
-</html>
+<script>
+    function updateSimulation() {
+        const day = parseInt(document.getElementById('daySelector').value);
+        
+        // Limpiar estados previos de cámaras dinámicas (C1 a C7)
+        for(let i=1; i<=7; i++) {
+            const cam = document.getElementById('cam' + i);
+            const stateText = document.getElementById('state-cam' + i);
+            cam.className = 'camara status-sealed';
+            stateText.innerText = 'Hermética 🔒';
+        }
+
+        // LÓGICA DINÁMICA ASÍNCRONA UNIFICADA
+        
+        // 1. Ruteo de NFC / Pulpa (Ciclo de 3 días: C1, C2, C3)
+        if (day === 0 || day === 3) {
+            document.getElementById('cam1').className = 'camara status-open';
+            document.getElementById('state-cam1').innerText = 'Abierta — Recibe Producción B + Interplanta A 🟢';
+        } else if (day === 1 || day === 4) {
+            document.getElementById('cam2').className = 'camara status-open';
+            document.getElementById('state-cam2').innerText = 'Abierta — Recibe Producción B + Interplanta A 🟢';
+        } else if (day === 2) {
+            document.getElementById('cam3').className = 'camara status-open';
+            document.getElementById('state-cam3').innerText = 'Abierta — Recibe Producción B + Interplanta A 🟢';
+        }
+
+        // 2. Ruteo de Jugos Propios Planta B (Ciclo de 4 cámaras: C4, C5, C6, C7)
+        if (day === 0 || day === 4) {
+            document.getElementById('cam4').className = 'camara status-open';
+            document.getElementById('state-cam4').innerText = 'Abierta — Recibe Goteo Jugos Planta B 🟡';
+        } else if (day === 1) {
+            document.getElementById('cam5').className = 'camara status-open';
+            document.getElementById('state-cam5').innerText = 'Abierta — Recibe Goteo Jugos Planta B 🟡';
+        } else if (day === 2) {
+            document.getElementById('cam6').className = 'camara status-open';
+            document.getElementById('state-cam
