@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citrusvil S.A. - Sistema Unificado de Cámaras</title>
+    <title>Citrusvil S.A. - Control de Cámaras Planta B</title>
     <style>
         :root {
             --citrus-dark: #005A36;
             --citrus-light: #78B833;
-            --neutral-dark: #2D3748;
-            --bg-canvas: #F4F7F4;
+            --neutral-dark: #1E293B;
+            --bg-canvas: #F8FAFC;
             --juice-color: #D69E2E;
             --nfc-color: #DD6B20;
             --inter-color: #3182CE;
@@ -25,129 +25,90 @@
         
         .header-panel {
             background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             border-left: 6px solid var(--citrus-dark);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
         }
-        .header-panel h1 { margin: 0; font-size: 24px; color: var(--citrus-dark); text-transform: uppercase; letter-spacing: 0.5px; }
-        .header-panel p { margin: 6px 0 0 0; font-size: 14px; color: #718096; }
+        .header-panel h1 { margin: 0; font-size: 20px; color: var(--citrus-dark); text-transform: uppercase; letter-spacing: 0.5px; }
+        .header-panel p { margin: 4px 0 0 0; font-size: 13px; color: #64748B; }
         
         .control-box {
-            background: #EDF2F7;
-            padding: 12px 20px;
+            background: #F1F5F9;
+            padding: 10px 15px;
             border-radius: 6px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             border: 1px solid #E2E8F0;
         }
         .control-box select {
-            padding: 6px 12px;
-            margin-left: 10px;
+            padding: 5px 10px;
+            margin-left: 8px;
             border-radius: 4px;
             border: 1px solid #CBD5E0;
             font-weight: 600;
-            color: var(--neutral-dark);
             background: white;
             cursor: pointer;
         }
 
         .block-card {
             background: white;
-            border-radius: 8px;
-            margin-bottom: 25px;
+            border-radius: 6px;
+            margin-bottom: 20px;
             border: 1px solid #E2E8F0;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.01);
         }
         .block-header {
             background-color: var(--citrus-dark);
             color: white;
-            padding: 14px 20px;
+            padding: 12px 16px;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .grid-camaras {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 15px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            padding: 16px;
         }
         .camara {
             border: 1px solid #E2E8F0;
-            border-radius: 6px;
-            padding: 18px;
-            position: relative;
+            border-radius: 4px;
+            padding: 14px;
             background: #FFFFFF;
-            transition: all 0.25s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
         }
         
-        /* Estados Dinámicos */
-        .camara.status-open-nfc {
-            border: 2px solid var(--nfc-color);
-            background-color: #FFFAF0;
-            box-shadow: 0 0 8px rgba(221, 107, 32, 0.15);
-        }
-        .camara.status-open-juice {
-            border: 2px solid var(--juice-color);
-            background-color: #FFFFF0;
-            box-shadow: 0 0 8px rgba(214, 158, 46, 0.15);
-        }
-        .camara.status-open-inter {
-            border: 2px solid var(--inter-color);
-            background-color: #F7FAFC;
-            box-shadow: 0 0 8px rgba(49, 130, 206, 0.15);
-        }
-        .camara.status-sealed {
-            border-left: 4px solid #A0AEC0;
-            background-color: #FAFAFA;
-        }
-        .camara.status-off {
-            background-color: #EDF2F7;
-            opacity: 0.6;
-            border: 1px dashed #CBD5E0;
-        }
+        /* Estados Visuales Sintéticos */
+        .camara.status-open-nfc { border-left: 5px solid var(--nfc-color); background-color: #FFFBF8; }
+        .camara.status-open-juice { border-left: 5px solid var(--juice-color); background-color: #FFFDF5; }
+        .camara.status-open-inter { border-left: 5px solid var(--inter-color); background-color: #F0F8FF; }
+        .camara.status-sealed { border-left: 5px solid #64748B; background-color: #F8FAFC; }
+        .camara.status-off { border-left: 5px solid #CBD5E0; background-color: #F1F5F9; opacity: 0.7; }
 
-        .cam-num { font-weight: bold; font-size: 16px; color: var(--citrus-dark); margin-bottom: 6px; }
+        .cam-num { font-weight: bold; font-size: 15px; color: #0F172A; }
         
         .badge {
-            display: inline-block;
             padding: 3px 8px;
             border-radius: 4px;
             font-size: 10px;
             font-weight: bold;
             text-transform: uppercase;
-            margin-bottom: 10px;
         }
         .badge-juice { background-color: #FEFCBF; color: #744210; }
         .badge-nfc { background-color: #FEEBC8; color: #7B341E; }
         .badge-inter { background-color: #EBF8FF; color: #2B6CB0; }
-        .badge-off { background-color: #E2E8F0; color: #4A5568; }
-
-        .live-status {
-            font-weight: bold;
-            font-size: 12px;
-            margin-top: 12px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .status-open-nfc .live-status { color: var(--nfc-color); }
-        .status-open-juice .live-status { color: var(--juice-color); }
-        .status-open-inter .live-status { color: var(--inter-color); }
-        .status-sealed .live-status { color: #718096; }
-        .status-off .live-status { color: #A0AEC0; }
-        
-        .desc { font-size: 12.5px; color: #4A5568; line-height: 1.4; margin-top: 5px; }
+        .badge-sealed { background-color: #E2E8F0; color: #475569; }
+        .badge-off { background-color: #E2E8F0; color: #94A3B8; }
     </style>
 </head>
 <body>
@@ -159,106 +120,46 @@
             <p>Simulador en tiempo real del ruteo dinámico Citrusvil</p>
         </div>
         <div class="control-box">
-            Simular Día de la Semana:
+            DÍA OPERATIVO Semanal:
             <select id="daySelector" onchange="updateSimulation()">
-                <option value="0">Lunes (DÍA 0)</option>
-                <option value="1">Martes (DÍA 1)</option>
-                <option value="2">Miércoles (DÍA 2)</option>
-                <option value="3">Jueves (DÍA 3)</option>
-                <option value="4">Viernes (DÍA 4)</option>
-                <option value="5">Sábado (DÍA 5)</option>
-                <option value="6">Domingo (DÍA 6)</option>
+                <option value="0">Lunes (Día 0)</option>
+                <option value="1">Martes (Día 1)</option>
+                <option value="2">Miércoles (Día 2)</option>
+                <option value="3">Jueves (Día 3)</option>
+                <option value="4">Viernes (Día 4)</option>
+                <option value="5">Sábado (Día 5) — Alerta Espacio</option>
+                <option value="6">Domingo (Día 6) — Alerta Espacio</option>
             </select>
         </div>
     </div>
 
     <div class="block-card">
-        <div class="block-header">BLOCK 1: AMBAS (PRODUCCIÓN DIARIA E INTERPLANTA)</div>
+        <div class="block-header">BLOCK 1: AMBAS (PRODUCCIÓN E INTERPLANTA)</div>
         <div class="grid-camaras">
-            <div class="camara" id="cam1">
-                <div class="cam-num">Cámara 1</div>
-                <span class="badge badge-nfc">NFC / Pulpa</span>
-                <div class="desc">Asignación de lotes de consistencia pulpa y NFC.</div>
-                <div class="live-status" id="state-cam1">Hermética 🔒</div>
-            </div>
-            <div class="camara" id="cam2">
-                <div class="cam-num">Cámara 2</div>
-                <span class="badge badge-nfc">NFC / Pulpa</span>
-                <div class="desc">Asignación de lotes de consistencia pulpa y NFC.</div>
-                <div class="live-status" id="state-cam2">Hermética 🔒</div>
-            </div>
-            <div class="camara" id="cam3">
-                <div class="cam-num">Cámara 3</div>
-                <span class="badge badge-nfc">NFC / Pulpa</span>
-                <div class="desc">Asignación de lotes de consistencia pulpa y NFC.</div>
-                <div class="live-status" id="state-cam3">Hermética 🔒</div>
-            </div>
-            <div class="camara" id="cam4">
-                <div class="cam-num">Cámara 4</div>
-                <span class="badge badge-juice">Jugo Turbio / Claro</span>
-                <div class="desc">Destinada exclusivamente al flujo base de la molienda diaria.</div>
-                <div class="live-status" id="state-cam4">Hermética 🔒</div>
-            </div>
+            <div class="camara" id="cam1"><div class="cam-num">Cámara 1</div><span class="badge" id="b1"></span></div>
+            <div class="camara" id="cam2"><div class="cam-num">Cámara 2</div><span class="badge" id="b2"></span></div>
+            <div class="camara" id="cam3"><div class="cam-num">Cámara 3</div><span class="badge" id="b3"></span></div>
+            <div class="camara" id="cam4"><div class="cam-num">Cámara 4</div><span class="badge" id="b4"></span></div>
         </div>
     </div>
 
     <div class="block-card">
         <div class="block-header">BLOCK 2: PRODUCCIÓN DIARIA</div>
         <div class="grid-camaras">
-            <div class="camara" id="cam5">
-                <div class="cam-num">Cámara 5</div>
-                <span class="badge badge-juice">Maduración Jugos</span>
-                <div class="desc">Pulmón estanco y estabilización térmica diferida.</div>
-                <div class="live-status" id="state-cam5">Hermética 🔒</div>
-            </div>
-            <div class="camara" id="cam6">
-                <div class="cam-num">Cámara 6</div>
-                <span class="badge badge-juice">Maduración Jugos</span>
-                <div class="desc">Pulmón estanco y estabilización térmica diferida.</div>
-                <div class="live-status" id="state-cam6">Hermética 🔒</div>
-            </div>
-            <div class="camara" id="cam7">
-                <div class="cam-num">Cámara 7</div>
-                <span class="badge badge-juice">Maduración Jugos</span>
-                <div class="desc">Pulmón estanco y estabilización térmica diferida.</div>
-                <div class="live-status" id="state-cam7">Hermética 🔒</div>
-            </div>
-            <div class="camara" id="cam8">
-                <div class="cam-num">Cámara 8</div>
-                <span class="badge badge-off">Reserva Pasiva</span>
-                <div class="desc">Módulo auxiliar de seguridad del bloque.</div>
-                <div class="live-status" id="state-cam8">Apagada (Solo por falta de espacio) 🚫</div>
-            </div>
+            <div class="camara" id="cam5"><div class="cam-num">Cámara 5</div><span class="badge" id="b5"></span></div>
+            <div class="camara" id="cam6"><div class="cam-num">Cámara 6</div><span class="badge" id="b6"></span></div>
+            <div class="camara" id="cam7"><div class="cam-num">Cámara 7</div><span class="badge" id="b7"></span></div>
+            <div class="camara" id="cam8"><div class="cam-num">Cámara 8</div><span class="badge" id="b8"></span></div>
         </div>
     </div>
 
     <div class="block-card">
         <div class="block-header">BLOCK 3: INTERPLANTA</div>
         <div class="grid-camaras">
-            <div class="camara" id="cam9">
-                <div class="cam-num">Cámara 9</div>
-                <span class="badge badge-inter">Hub Arribos A</span>
-                <div class="desc">Recepción directa de jugos concentrados y congelados de Planta A.</div>
-                <div class="live-status" id="state-cam9">Recibiendo Arribos 📥</div>
-            </div>
-            <div class="camara" id="cam10">
-                <div class="cam-num">Cámara 10</div>
-                <span class="badge badge-off">Reserva Pasiva</span>
-                <div class="desc">Módulo auxiliar para contingencias de stock congelado.</div>
-                <div class="live-status" id="state-cam10">Apagada (Solo por falta de espacio) 🚫</div>
-            </div>
-            <div class="camara" id="cam11">
-                <div class="cam-num">Cámara 11</div>
-                <span class="badge badge-off">Reserva Pasiva</span>
-                <div class="desc">Módulo auxiliar para contingencias de stock congelado.</div>
-                <div class="live-status" id="state-cam11">Apagada (Solo por falta de espacio) 🚫</div>
-            </div>
-            <div class="camara" id="cam12">
-                <div class="cam-num">Cámara 12</div>
-                <span class="badge badge-off">Reserva Pasiva</span>
-                <div class="desc">Módulo auxiliar para contingencias de stock congelado.</div>
-                <div class="live-status" id="state-cam12">Apagada (Solo por falta de espacio) 🚫</div>
-            </div>
+            <div class="camara" id="cam9"><div class="cam-num">Cámara 9</div><span class="badge" id="b9"></span></div>
+            <div class="camara" id="cam10"><div class="cam-num">Cámara 10</div><span class="badge" id="b10"></span></div>
+            <div class="camara" id="cam11"><div class="cam-num">Cámara 11</div><span class="badge" id="b11"></span></div>
+            <div class="camara" id="cam12"><div class="cam-num">Cámara 12</div><span class="badge" id="b12"></span></div>
         </div>
     </div>
 </div>
@@ -267,71 +168,64 @@
     function updateSimulation() {
         const day = parseInt(document.getElementById('daySelector').value);
         
-        // 1. Resetear Cámaras de Bloques Dinámicos (C1 a C7) a estado estanco/hermético
+        // 1. Resetear Cámaras de Trabajo a Herméticas (C1 a C7)
         for(let i=1; i<=7; i++) {
-            const cam = document.getElementById('cam' + i);
-            const stateText = document.getElementById('state-cam' + i);
-            cam.className = 'camara status-sealed';
-            stateText.innerText = 'Hermética (Aislamiento) 🔒';
+            document.getElementById('cam' + i).className = 'camara status-sealed';
+            const b = document.getElementById('b' + i);
+            b.className = 'badge badge-sealed';
+            b.innerText = 'Hermética';
         }
 
-        // 2. Resetear Cámaras de Reserva (C8, C10, C11, C12) a Apagadas
+        // 2. Resetear Cámaras de Reserva Activa a Apagadas (C8, C10, C11, C12)
         const reservas = [8, 10, 11, 12];
         reservas.forEach(num => {
-            const cam = document.getElementById('cam' + num);
-            const stateText = document.getElementById('state-cam' + num);
-            cam.className = 'camara status-off';
-            stateText.innerText = 'Apagada (Solo por falta de espacio) 🚫';
+            document.getElementById('cam' + num).className = 'camara status-off';
+            const b = document.getElementById('b' + num);
+            b.className = 'badge badge-off';
+            b.innerText = 'Apagada';
         });
 
-        // 3. Fijar Canal Continuo de Interplanta en Cámara 9 (Siempre Abierta)
+        // 3. Fijar canal continuo de Interplanta en Cámara 9
         document.getElementById('cam9').className = 'camara status-open-inter';
-        document.getElementById('state-cam9').innerText = 'Abierta — Recibe Jugo Interplanta A 📥';
+        const b9 = document.getElementById('b9');
+        b9.className = 'badge badge-inter';
+        b9.innerText = 'Recepción Jugo A';
 
+        // ================= ASIGNACIÓN ALGORÍTMICA DINÁMICA =================
+        
+        // Flujo NFC / Pulpa (Rotación de 3 días)
+        const nfcRoute = day % 3;
+        const targetNFC = document.getElementById('cam' + (nfcRoute + 1));
+        const badgeNFC = document.getElementById('b' + (nfcRoute + 1));
+        targetNFC.className = 'camara status-open-nfc';
+        badgeNFC.className = 'badge badge-nfc';
+        badgeNFC.innerText = 'Recepción NFC';
 
-        // ================= LÓGICA LOGÍSTICA DE ASIGNACIÓN (7 DÍAS) =================
-
-        // Ruteo de NFC / Pulpa (Ciclos asíncronos de 3 días rotativos)
-        const nfcRoute = day % 3; 
-        if (nfcRoute === 0) {
-            document.getElementById('cam1').className = 'camara status-open-nfc';
-            document.getElementById('state-cam1').innerText = 'Abierta — Recibe NFC/Pulpa (Prod. Diaria + Interplanta) 🟠';
-        } else if (nfcRoute === 1) {
-            document.getElementById('cam2').className = 'camara status-open-nfc';
-            document.getElementById('state-cam2').innerText = 'Abierta — Recibe NFC/Pulpa (Prod. Diaria + Interplanta) 🟠';
-        } else if (nfcRoute === 2) {
-            document.getElementById('cam3').className = 'camara status-open-nfc';
-            document.getElementById('state-cam3').innerText = 'Abierta — Recibe NFC/Pulpa (Prod. Diaria + Interplanta) 🟠';
-        }
-
-        // Ruteo de Jugos de Producción Diaria (Ciclos secuenciales distribuidos en 4 cámaras)
+        // Flujo Jugo Propio Planta B (Rotación de 4 cámaras: C4, C5, C6, C7)
         const juiceRoute = day % 4;
-        if (juiceRoute === 0) {
-            document.getElementById('cam4').className = 'camara status-open-juice';
-            document.getElementById('state-cam4').innerText = 'Abierta — Recibe Goteo Jugo Planta B 🟡';
-        } else if (juiceRoute === 1) {
-            document.getElementById('cam5').className = 'camara status-open-juice';
-            document.getElementById('state-cam5').innerText = 'Abierta — Recibe Goteo Jugo Planta B 🟡';
-        } else if (juiceRoute === 2) {
-            document.getElementById('cam6').className = 'camara status-open-juice';
-            document.getElementById('state-cam6').innerText = 'Abierta — Recibe Goteo Jugo Planta B 🟡';
-        } else if (juiceRoute === 3) {
-            document.getElementById('cam7').className = 'camara status-open-juice';
-            document.getElementById('state-cam7').innerText = 'Abierta — Recibe Goteo Jugo Planta B 🟡';
-        }
+        const targetJuiceNum = juiceRoute === 0 ? 4 : (juiceRoute + 4);
+        const targetJuice = document.getElementById('cam' + targetJuiceNum);
+        const badgeJuice = document.getElementById('b' + targetJuiceNum);
+        targetJuice.className = 'camara status-open-juice';
+        badgeJuice.className = 'badge badge-juice';
+        badgeJuice.innerText = 'Recepción Jugo B';
 
-        // Simulación de Alertas de Saturación de Espacio para activar reservas pasivas (Fines de semana o picos de carga)
-        if (day === 5) { // Sábado: Ejemplo de saturación en Producción Diaria
-            document.getElementById('cam8').className = 'camara status-open-juice';
-            document.getElementById('state-cam8').innerText = '⚡ ACTIVADA — Soporte por saturación de Jugo Propio 🟡';
+        // ================= SIMULACIÓN DE CONTINGENCIA POR FALTA DE ESPACIO =================
+        if (day === 5) { // Sábado: Sobrecarga en Producción Diaria activa Cámara 8
+            const c8 = document.getElementById('cam8');
+            const b8 = document.getElementById('b8');
+            c8.className = 'camara status-open-juice';
+            b8.className = 'badge badge-juice';
+            b8.innerText = 'Reserva Activa';
         }
-        if (day === 6) { // Domingo: Ejemplo de alta concentración por arribos acumulados de Interplanta
-            document.getElementById('cam10').className = 'camara status-open-inter';
-            document.getElementById('state-cam10').innerText = '⚡ ACTIVADA — Soporte por saturación Interplanta A 📥';
+        if (day === 6) { // Domingo: Saturación por arribos de Interplanta activa Cámara 10
+            const c10 = document.getElementById('cam10');
+            const b10 = document.getElementById('b10');
+            c10.className = 'camara status-open-inter';
+            b10.className = 'badge badge-inter';
+            b10.innerText = 'Reserva Activa';
         }
     }
-    
-    // Ejecución inicial por defecto al cargar el Monitor
     updateSimulation();
 </script>
 
