@@ -21,7 +21,7 @@
             margin: 0;
             padding: 20px;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1300px; margin: 0 auto; }
         
         .header-panel {
             background: white;
@@ -34,7 +34,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        .header-panel h1 { margin: 0; font-size: 20px; color: var(--citrus-dark); text-transform: uppercase; letter-spacing: 0.5px; }
+        .header-panel h1 { margin: 0; font-size: 22px; color: var(--citrus-dark); text-transform: uppercase; letter-spacing: 0.5px; }
         .header-panel p { margin: 4px 0 0 0; font-size: 13px; color: #64748B; }
         
         .control-box {
@@ -58,23 +58,24 @@
         .block-card {
             background: white;
             border-radius: 6px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             border: 1px solid #E2E8F0;
             overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
         }
         .block-header {
             background-color: var(--citrus-dark);
             color: white;
             padding: 12px 16px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .grid-camaras {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
             padding: 16px;
         }
         .camara {
@@ -84,22 +85,23 @@
             background: #FFFFFF;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            justify-content: space-between;
+            min-height: 140px;
             transition: all 0.2s ease;
         }
         
-        /* Estados de Ruteo */
-        .camara.status-open-nfc { border-left: 5px solid var(--nfc-color); background-color: #FFFBF8; }
-        .camara.status-open-juice { border-left: 5px solid var(--juice-color); background-color: #FFFDF5; }
-        .camara.status-open-inter { border-left: 5px solid var(--inter-color); background-color: #F0F8FF; }
-        .camara.status-sealed { border-left: 5px solid #64748B; background-color: #F8FAFC; }
-        .camara.status-off { border-left: 5px solid #CBD5E0; background-color: #F1F5F9; opacity: 0.6; }
+        /* Estados Dinámicos */
+        .camara.status-open-nfc { border-left: 6px solid var(--nfc-color); background-color: #FFFBF8; box-shadow: 0 0 8px rgba(221, 107, 32, 0.08); }
+        .camara.status-open-juice { border-left: 6px solid var(--juice-color); background-color: #FFFDF5; box-shadow: 0 0 8px rgba(214, 158, 46, 0.08); }
+        .camara.status-open-inter { border-left: 6px solid var(--inter-color); background-color: #F0F8FF; box-shadow: 0 0 8px rgba(49, 130, 206, 0.08); }
+        .camara.status-sealed { border-left: 6px solid #64748B; background-color: #F8FAFC; }
+        .camara.status-off { border-left: 6px solid #CBD5E0; background-color: #F1F5F9; opacity: 0.65; }
 
-        .cam-num { font-weight: bold; font-size: 15px; color: #0F172A; }
+        .cam-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .cam-num { font-weight: bold; font-size: 16px; color: #0F172A; }
         
         .badge {
-            align-self: flex-start;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 4px;
             font-size: 10px;
             font-weight: bold;
@@ -111,15 +113,27 @@
         .badge-sealed { background-color: #E2E8F0; color: #475569; }
         .badge-off { background-color: #E2E8F0; color: #94A3B8; }
 
-        .cam-info {
-            font-size: 12px;
+        .cam-desc {
+            font-size: 12.5px;
             color: #475569;
             line-height: 1.4;
             margin: 0;
+            flex-grow: 1;
         }
-        .cam-info strong {
-            color: #0F172A;
+        .cam-desc strong { color: #0F172A; }
+
+        .cam-status-text {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
         }
+        .status-open-nfc .cam-status-text { color: var(--nfc-color); }
+        .status-open-juice .cam-status-text { color: var(--juice-color); }
+        .status-open-inter .cam-status-text { color: var(--inter-color); }
+        .status-sealed .cam-status-text { color: #64748B; }
+        .status-off .cam-status-text { color: #94A3B8; }
     </style>
 </head>
 <body>
@@ -145,27 +159,27 @@
     </div>
 
     <div class="block-card">
-        <div class="block-header">BLOCK 1: AMBAS (PRODUCCIÓN E INTERPLANTA)</div>
+        <div class="block-header">BLOCK 1: AMBAS (PRODUCCIÓN DIARIA E INTERPLANTA)</div>
         <div class="grid-camaras">
             <div class="camara" id="cam1">
-                <div class="cam-num">Cámara 1</div>
-                <span class="badge" id="b1"></span>
-                <p class="cam-info" id="text-cam1"></p>
+                <div class="cam-top"><div class="cam-num">Cámara 1</div><span class="badge" id="b1"></span></div>
+                <p class="cam-desc" id="d1">Asignación de lotes de consistencia pulpa y NFC. Absorbe volumen de Planta B e Interplanta A.</p>
+                <div class="cam-status-text" id="st1"></div>
             </div>
             <div class="camara" id="cam2">
-                <div class="cam-num">Cámara 2</div>
-                <span class="badge" id="b2"></span>
-                <p class="cam-info" id="text-cam2"></p>
+                <div class="cam-top"><div class="cam-num">Cámara 2</div><span class="badge" id="b2"></span></div>
+                <p class="cam-desc" id="d2">Asignación de lotes de consistencia pulpa y NFC. Absorbe volumen de Planta B e Interplanta A.</p>
+                <div class="cam-status-text" id="st2"></div>
             </div>
             <div class="camara" id="cam3">
-                <div class="cam-num">Cámara 3</div>
-                <span class="badge" id="b3"></span>
-                <p class="cam-info" id="text-cam3"></p>
+                <div class="cam-top"><div class="cam-num">Cámara 3</div><span class="badge" id="b3"></span></div>
+                <p class="cam-desc" id="d3">Asignación de lotes de consistencia pulpa y NFC. Absorbe volumen de Planta B e Interplanta A.</p>
+                <div class="cam-status-text" id="st3"></div>
             </div>
             <div class="camara" id="cam4">
-                <div class="cam-num">Cámara 4</div>
-                <span class="badge" id="b4"></span>
-                <p class="cam-info" id="text-cam4"></p>
+                <div class="cam-top"><div class="cam-num">Cámara 4</div><span class="badge" id="b4"></span></div>
+                <p class="cam-desc" id="d4">Canalización del flujo base de molienda y concentrados de Planta B.</p>
+                <div class="cam-status-text" id="st4"></div>
             </div>
         </div>
     </div>
@@ -174,24 +188,24 @@
         <div class="block-header">BLOCK 2: PRODUCCIÓN DIARIA</div>
         <div class="grid-camaras">
             <div class="camara" id="cam5">
-                <div class="cam-num">Cámara 5</div>
-                <span class="badge" id="b5"></span>
-                <p class="cam-info" id="text-cam5"></p>
+                <div class="cam-top"><div class="cam-num">Cámara 5</div><span class="badge" id="b5"></span></div>
+                <p class="cam-desc" id="d5">Pulmón estanco y estabilización térmica diferida para la producción propia de Planta B.</p>
+                <div class="cam-status-text" id="st5"></div>
             </div>
             <div class="camara" id="cam6">
-                <div class="cam-num">Cámara 6</div>
-                <span class="badge" id="b6"></span>
-                <p class="cam-info" id="text-cam6"></p>
+                <div class="cam-top"><div class="cam-num">Cámara 6</div><span class="badge" id="b6"></span></div>
+                <p class="cam-desc" id="d6">Pulmón estanco y estabilización térmica diferida para la producción propia de Planta B.</p>
+                <div class="cam-status-text" id="st6"></div>
             </div>
             <div class="camara" id="cam7">
-                <div class="cam-num">Cámara 7</div>
-                <span class="badge" id="b7"></span>
-                <p class="cam-info" id="text-cam7"></p>
+                <div class="cam-top"><div class="cam-num">Cámara 7</div><span class="badge" id="b7"></span></div>
+                <p class="cam-desc" id="d7">Pulmón estanco y estabilización térmica diferida para la producción propia de Planta B.</p>
+                <div class="cam-status-text" id="st7"></div>
             </div>
             <div class="camara" id="cam8">
-                <div class="cam-num">Cámara 8</div>
-                <span class="badge" id="b8"></span>
-                <p class="cam-info" id="text-cam8"></p>
+                <div class="cam-top"><div class="cam-num">Cámara 8</div><span class="badge" id="b8"></span></div>
+                <p class="cam-desc" id="d8">Módulo de reserva pasiva del bloque de producción diaria. Inactivo por ahorro energético.</p>
+                <div class="cam-status-text" id="st8"></div>
             </div>
         </div>
     </div>
@@ -200,19 +214,110 @@
         <div class="block-header">BLOCK 3: INTERPLANTA</div>
         <div class="grid-camaras">
             <div class="camara" id="cam9">
-                <div class="cam-num">Cámara 9</div>
-                <span class="badge" id="b9"></span>
-                <p class="cam-info" id="text-cam9"></p>
+                <div class="cam-top"><div class="cam-num">Cámara 9</div><span class="badge" id="b9"></span></div>
+                <p class="cam-desc" id="d9">Hub de recepción continua para jugos concentrados congelados provenientes de Planta A.</p>
+                <div class="cam-status-text" id="st9"></div>
             </div>
             <div class="camara" id="cam10">
                 <div class="cam-num">Cámara 10</div>
                 <span class="badge" id="b10"></span>
-                <p class="cam-info" id="text-cam10"></p>
+                <p class="cam-desc" id="d10">Módulo auxiliar asignado a contingencias y picos de arribos acumulados de Interplanta A.</p>
+                <div class="cam-status-text" id="st10"></div>
             </div>
             <div class="camara" id="cam11">
                 <div class="cam-num">Cámara 11</div>
                 <span class="badge" id="b11"></span>
-                <p class="cam-info" id="text-cam11"></p>
+                <p class="cam-desc" id="d11">Módulo auxiliar asignado a contingencias y picos de arribos acumulados de Interplanta A.</p>
+                <div class="cam-status-text" id="st11"></div>
             </div>
             <div class="camara" id="cam12">
-                <div class="cam-num
+                <div class="cam-num">Cámara 12</div>
+                <span class="badge" id="b12"></span>
+                <p class="cam-desc" id="d12">Módulo auxiliar asignado a contingencias y picos de arribos acumulados de Interplanta A.</p>
+                <div class="cam-status-text" id="st12"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateSimulation() {
+        const day = parseInt(document.getElementById('daySelector').value);
+        
+        // 1. Inicialización de Cámaras Operativas (C1 a C7) a Estado Estanco
+        for(let i=1; i<=7; i++) {
+            document.getElementById('cam' + i).className = 'camara status-sealed';
+            document.getElementById('b' + i).className = 'badge badge-sealed';
+            document.getElementById('b' + i).innerText = 'Hermética';
+            document.getElementById('st1').innerText = '🔒 ESTANCO — AISLAMIENTO ACTIVO';
+            if(i <= 3) {
+                document.getElementById('d' + i).innerHTML = 'Asignación de lotes de consistencia pulpa y NFC. Absorbe volumen de <strong>Planta B e Interplanta A</strong>.';
+            } else {
+                document.getElementById('d' + i).innerHTML = i === 4 ? 
+                    'Canalización del flujo base de molienda y concentrados de <strong>Planta B</strong>.' : 
+                    'Pulmón estanco y estabilización térmica diferida para la producción propia de <strong>Planta B</strong>.';
+            }
+        }
+
+        // 2. Inicialización de Reservas Pasivas (C8, C10, C11, C12) a Apagadas
+        const reservas = [8, 10, 11, 12];
+        reservas.forEach(num => {
+            document.getElementById('cam' + num).className = 'camara status-off';
+            document.getElementById('b' + num).className = 'badge badge-off';
+            document.getElementById('b' + num).innerText = 'Apagada';
+            document.getElementById('st' + num).innerText = '🚫 INACTIVA — AHORRO ENERGÉTICO';
+            document.getElementById('d' + num).innerHTML = num === 8 ? 
+                'Módulo de reserva pasiva del bloque de producción diaria. Se activa <strong>únicamente por falta de espacio</strong>.' : 
+                'Módulo auxiliar asignado a contingencias de Interplanta. Se activa <strong>únicamente por falta de espacio</strong>.';
+        });
+
+        // 3. Fijar Canal de Entrada Permanente de Interplanta en Cámara 9
+        document.getElementById('cam9').className = 'camara status-open-inter';
+        document.getElementById('b9').className = 'badge badge-inter';
+        document.getElementById('b9').innerText = 'Abierta';
+        document.getElementById('d9').innerHTML = 'Hub de recepción continua para jugos concentrados congelados provenientes de <strong>Planta A</strong>.';
+        document.getElementById('st9').innerText = '📥 ENTRADA ACTIVA — ARRIBOS INTERPLANTA A';
+
+        // ================= ASIGNACIÓN DINÁMICA DE FLUJOS SEMANALES =================
+        
+        // Ruteo NFC / Pulpa (Rotación de 3 días) -> Destino: Block 1 (C1, C2, C3)
+        const nfcRoute = day % 3;
+        const targetNFCNum = nfcRoute + 1;
+        document.getElementById('cam' + targetNFCNum).className = 'camara status-open-nfc';
+        document.getElementById('b' + targetNFCNum).className = 'badge badge-nfc';
+        document.getElementById('b' + targetNFCNum).innerText = 'Abierta';
+        document.getElementById('d' + targetNFCNum).innerHTML = 'Recibiendo activamente lotes de <strong>NFC / Pulpa</strong> consolidados de <strong>Planta B + Interplanta A</strong>.';
+        document.getElementById('st' + targetNFCNum).innerText = '🟠 ENTRADA ACTIVA — INGRESO CONSOLIDADO AMBAS PLANTAS';
+
+        // Ruteo Jugo de Producción Diaria Planta B (Rotación de 4 cámaras: C4, C5, C6, C7)
+        const juiceRoute = day % 4;
+        const targetJuiceNum = juiceRoute === 0 ? 4 : (juiceRoute + 4);
+        document.getElementById('cam' + targetJuiceNum).className = 'camara status-open-juice';
+        document.getElementById('b' + targetJuiceNum).className = 'badge badge-juice';
+        document.getElementById('b' + targetJuiceNum).innerText = 'Abierta';
+        document.getElementById('d' + targetJuiceNum).innerHTML = 'Recibiendo stock térmico de <strong>Jugo Concentrado</strong> de <strong>Producción Diaria Planta B</strong>.';
+        document.getElementById('st' + targetJuiceNum).innerText = '🟡 ENTRADA ACTIVA — FLUJO EXCLUSIVO PLANTA B';
+
+        // ================= DETECTORES DE SATURACIÓN (CÁMARAS EN GRIS) =================
+        if (day === 5) { // Sábado: Caída de espacio en Bloque de Producción Diaria
+            const c8 = document.getElementById('cam8');
+            c8.className = 'camara status-open-juice';
+            document.getElementById('b8').className = 'badge badge-juice';
+            document.getElementById('b8').innerText = 'Reserva Activa';
+            document.getElementById('d8').innerHTML = 'Activada por algoritmo de contingencia. Absorbiendo excedente de <strong>Jugo de Planta B</strong>.';
+            document.getElementById('st8').innerText = '⚠️ ENTRADA AUXILIAR — COMPENSACIÓN DE CAPACIDAD';
+        }
+        if (day === 6) { // Domingo: Acumulación crítica de camiones en Interplanta
+            const c10 = document.getElementById('cam10');
+            c10.className = 'camara status-open-inter';
+            document.getElementById('b10').className = 'badge badge-inter';
+            document.getElementById('b10').innerText = 'Reserva Activa';
+            document.getElementById('d10').innerHTML = 'Activada por algoritmo de contingencia. Absorbiendo excedente de <strong>Jugo de Interplanta A</strong>.';
+            document.getElementById('st10').innerText = '⚠️ ENTRADA AUXILIAR — COMPENSACIÓN INTERPLANTA';
+        }
+    }
+    updateSimulation();
+</script>
+
+</body>
+</html>
