@@ -178,7 +178,7 @@
             </div>
             <div class="camara" id="cam4">
                 <div class="cam-top"><div class="cam-num">Cámara 4</div><span class="badge" id="b4"></span></div>
-                <p class="cam-desc" id="d4">Canalización del flujo base de molienda y concentrados de Planta B.</p>
+                <p class="cam-desc" id="d4">Almacenamiento y estabilización térmica para el flujo de la producción de jugos de Planta B.</p>
                 <div class="cam-status-text" id="st4"></div>
             </div>
         </div>
@@ -189,17 +189,17 @@
         <div class="grid-camaras">
             <div class="camara" id="cam5">
                 <div class="cam-top"><div class="cam-num">Cámara 5</div><span class="badge" id="b5"></span></div>
-                <p class="cam-desc" id="d5">Pulmón estanco y estabilización térmica diferida para la producción propia de Planta B.</p>
+                <p class="cam-desc" id="d5">Almacenamiento y estabilización térmica para el flujo de la producción de jugos de Planta B.</p>
                 <div class="cam-status-text" id="st5"></div>
             </div>
             <div class="camara" id="cam6">
                 <div class="cam-top"><div class="cam-num">Cámara 6</div><span class="badge" id="b6"></span></div>
-                <p class="cam-desc" id="d6">Pulmón estanco y estabilización térmica diferida para la producción propia de Planta B.</p>
+                <p class="cam-desc" id="d6">Almacenamiento y estabilización térmica para el flujo de la producción de jugos de Planta B.</p>
                 <div class="cam-status-text" id="st6"></div>
             </div>
             <div class="camara" id="cam7">
                 <div class="cam-top"><div class="cam-num">Cámara 7</div><span class="badge" id="b7"></span></div>
-                <p class="cam-desc" id="d7">Pulmón estanco y estabilización térmica diferida para la producción propia de Planta B.</p>
+                <p class="cam-desc" id="d7">Almacenamiento y estabilización térmica para el flujo de la producción de jugos de Planta B.</p>
                 <div class="cam-status-text" id="st7"></div>
             </div>
             <div class="camara" id="cam8">
@@ -219,20 +219,17 @@
                 <div class="cam-status-text" id="st9"></div>
             </div>
             <div class="camara" id="cam10">
-                <div class="cam-num">Cámara 10</div>
-                <span class="badge" id="b10"></span>
+                <div class="cam-top"><div class="cam-num">Cámara 10</div><span class="badge" id="b10"></span></div>
                 <p class="cam-desc" id="d10">Módulo auxiliar asignado a contingencias y picos de arribos acumulados de Interplanta A.</p>
                 <div class="cam-status-text" id="st10"></div>
             </div>
             <div class="camara" id="cam11">
-                <div class="cam-num">Cámara 11</div>
-                <span class="badge" id="b11"></span>
+                <div class="cam-top"><div class="cam-num">Cámara 11</div><span class="badge" id="b11"></span></div>
                 <p class="cam-desc" id="d11">Módulo auxiliar asignado a contingencias y picos de arribos acumulados de Interplanta A.</p>
                 <div class="cam-status-text" id="st11"></div>
             </div>
             <div class="camara" id="cam12">
-                <div class="cam-num">Cámara 12</div>
-                <span class="badge" id="b12"></span>
+                <div class="cam-top"><div class="cam-num">Cámara 12</div><span class="badge" id="b12"></span></div>
                 <p class="cam-desc" id="d12">Módulo auxiliar asignado a contingencias y picos de arribos acumulados de Interplanta A.</p>
                 <div class="cam-status-text" id="st12"></div>
             </div>
@@ -249,13 +246,13 @@
             document.getElementById('cam' + i).className = 'camara status-sealed';
             document.getElementById('b' + i).className = 'badge badge-sealed';
             document.getElementById('b' + i).innerText = 'Hermética';
-            document.getElementById('st1').innerText = '🔒 ESTANCO — AISLAMIENTO ACTIVO';
+            document.getElementById('st' + i).innerText = '🔒 ESTANCO — AISLAMIENTO ACTIVO';
+            
             if(i <= 3) {
                 document.getElementById('d' + i).innerHTML = 'Asignación de lotes de consistencia pulpa y NFC. Absorbe volumen de <strong>Planta B e Interplanta A</strong>.';
             } else {
-                document.getElementById('d' + i).innerHTML = i === 4 ? 
-                    'Canalización del flujo base de molienda y concentrados de <strong>Planta B</strong>.' : 
-                    'Pulmón estanco y estabilización térmica diferida para la producción propia de <strong>Planta B</strong>.';
+                // Descripciones unificadas e idénticas para C4, C5, C6 y C7
+                document.getElementById('d' + i).innerHTML = 'Almacenamiento y estabilización térmica para el flujo de la <strong>producción de jugos de Planta B</strong>.';
             }
         }
 
@@ -289,13 +286,13 @@
         document.getElementById('d' + targetNFCNum).innerHTML = 'Recibiendo activamente lotes de <strong>NFC / Pulpa</strong> consolidados de <strong>Planta B + Interplanta A</strong>.';
         document.getElementById('st' + targetNFCNum).innerText = '🟠 ENTRADA ACTIVA — INGRESO CONSOLIDADO AMBAS PLANTAS';
 
-        // Ruteo Jugo de Producción Diaria Planta B (Rotación de 4 cámaras: C4, C5, C6, C7)
+        // Ruteo Jugo de Producción Diaria Planta B (Rotación unificada de 4 cámaras: C4, C5, C6, C7)
         const juiceRoute = day % 4;
         const targetJuiceNum = juiceRoute === 0 ? 4 : (juiceRoute + 4);
         document.getElementById('cam' + targetJuiceNum).className = 'camara status-open-juice';
         document.getElementById('b' + targetJuiceNum).className = 'badge badge-juice';
         document.getElementById('b' + targetJuiceNum).innerText = 'Abierta';
-        document.getElementById('d' + targetJuiceNum).innerHTML = 'Recibiendo stock térmico de <strong>Jugo Concentrado</strong> de <strong>Producción Diaria Planta B</strong>.';
+        document.getElementById('d' + targetJuiceNum).innerHTML = 'Recibiendo flujo directo de la <strong>producción de jugos de Planta B</strong>.';
         document.getElementById('st' + targetJuiceNum).innerText = '🟡 ENTRADA ACTIVA — FLUJO EXCLUSIVO PLANTA B';
 
         // ================= DETECTORES DE SATURACIÓN (CÁMARAS EN GRIS) =================
@@ -304,7 +301,7 @@
             c8.className = 'camara status-open-juice';
             document.getElementById('b8').className = 'badge badge-juice';
             document.getElementById('b8').innerText = 'Reserva Activa';
-            document.getElementById('d8').innerHTML = 'Activada por algoritmo de contingencia. Absorbiendo excedente de <strong>Jugo de Planta B</strong>.';
+            document.getElementById('d8').innerHTML = 'Activada por algoritmo de contingencia. Absorbiendo excedente de <strong>producción de jugos de Planta B</strong>.';
             document.getElementById('st8').innerText = '⚠️ ENTRADA AUXILIAR — COMPENSACIÓN DE CAPACIDAD';
         }
         if (day === 6) { // Domingo: Acumulación crítica de camiones en Interplanta
