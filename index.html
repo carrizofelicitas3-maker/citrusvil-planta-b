@@ -73,18 +73,19 @@
         }
         .grid-camaras {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 12px;
             padding: 16px;
         }
         .camara {
             border: 1px solid #E2E8F0;
             border-radius: 4px;
-            padding: 14px;
+            padding: 16px;
             background: #FFFFFF;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.2s ease;
         }
         
         /* Estados de Ruteo */
@@ -92,11 +93,12 @@
         .camara.status-open-juice { border-left: 5px solid var(--juice-color); background-color: #FFFDF5; }
         .camara.status-open-inter { border-left: 5px solid var(--inter-color); background-color: #F0F8FF; }
         .camara.status-sealed { border-left: 5px solid #64748B; background-color: #F8FAFC; }
-        .camara.status-off { border-left: 5px solid #CBD5E0; background-color: #F1F5F9; opacity: 0.7; }
+        .camara.status-off { border-left: 5px solid #CBD5E0; background-color: #F1F5F9; opacity: 0.6; }
 
         .cam-num { font-weight: bold; font-size: 15px; color: #0F172A; }
         
         .badge {
+            align-self: flex-start;
             padding: 4px 10px;
             border-radius: 4px;
             font-size: 10px;
@@ -108,6 +110,16 @@
         .badge-inter { background-color: #EBF8FF; color: #2B6CB0; }
         .badge-sealed { background-color: #E2E8F0; color: #475569; }
         .badge-off { background-color: #E2E8F0; color: #94A3B8; }
+
+        .cam-info {
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.4;
+            margin: 0;
+        }
+        .cam-info strong {
+            color: #0F172A;
+        }
     </style>
 </head>
 <body>
@@ -119,11 +131,88 @@
             <p>Simulador en tiempo real del ruteo dinámico Citrusvil</p>
         </div>
         <div class="control-box">
-            DÍA OPERATIVO:
+            DÍA OPERATIVO SEMANAL:
             <select id="daySelector" onchange="updateSimulation()">
                 <option value="0">Lunes (Día 0)</option>
                 <option value="1">Martes (Día 1)</option>
                 <option value="2">Miércoles (Día 2)</option>
                 <option value="3">Jueves (Día 3)</option>
                 <option value="4">Viernes (Día 4)</option>
-                <option value="5">S
+                <option value="5">Sábado (Día 5) — Alerta de Capacidad</option>
+                <option value="6">Domingo (Día 6) — Alerta de Capacidad</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="block-card">
+        <div class="block-header">BLOCK 1: AMBAS (PRODUCCIÓN E INTERPLANTA)</div>
+        <div class="grid-camaras">
+            <div class="camara" id="cam1">
+                <div class="cam-num">Cámara 1</div>
+                <span class="badge" id="b1"></span>
+                <p class="cam-info" id="text-cam1"></p>
+            </div>
+            <div class="camara" id="cam2">
+                <div class="cam-num">Cámara 2</div>
+                <span class="badge" id="b2"></span>
+                <p class="cam-info" id="text-cam2"></p>
+            </div>
+            <div class="camara" id="cam3">
+                <div class="cam-num">Cámara 3</div>
+                <span class="badge" id="b3"></span>
+                <p class="cam-info" id="text-cam3"></p>
+            </div>
+            <div class="camara" id="cam4">
+                <div class="cam-num">Cámara 4</div>
+                <span class="badge" id="b4"></span>
+                <p class="cam-info" id="text-cam4"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="block-card">
+        <div class="block-header">BLOCK 2: PRODUCCIÓN DIARIA</div>
+        <div class="grid-camaras">
+            <div class="camara" id="cam5">
+                <div class="cam-num">Cámara 5</div>
+                <span class="badge" id="b5"></span>
+                <p class="cam-info" id="text-cam5"></p>
+            </div>
+            <div class="camara" id="cam6">
+                <div class="cam-num">Cámara 6</div>
+                <span class="badge" id="b6"></span>
+                <p class="cam-info" id="text-cam6"></p>
+            </div>
+            <div class="camara" id="cam7">
+                <div class="cam-num">Cámara 7</div>
+                <span class="badge" id="b7"></span>
+                <p class="cam-info" id="text-cam7"></p>
+            </div>
+            <div class="camara" id="cam8">
+                <div class="cam-num">Cámara 8</div>
+                <span class="badge" id="b8"></span>
+                <p class="cam-info" id="text-cam8"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="block-card">
+        <div class="block-header">BLOCK 3: INTERPLANTA</div>
+        <div class="grid-camaras">
+            <div class="camara" id="cam9">
+                <div class="cam-num">Cámara 9</div>
+                <span class="badge" id="b9"></span>
+                <p class="cam-info" id="text-cam9"></p>
+            </div>
+            <div class="camara" id="cam10">
+                <div class="cam-num">Cámara 10</div>
+                <span class="badge" id="b10"></span>
+                <p class="cam-info" id="text-cam10"></p>
+            </div>
+            <div class="camara" id="cam11">
+                <div class="cam-num">Cámara 11</div>
+                <span class="badge" id="b11"></span>
+                <p class="cam-info" id="text-cam11"></p>
+            </div>
+            <div class="camara" id="cam12">
+                <div class="cam-num
