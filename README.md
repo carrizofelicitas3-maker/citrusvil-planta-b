@@ -1,2 +1,0 @@
-# citrusvil-planta-b
-Simulaciones
