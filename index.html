@@ -24,9 +24,9 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Posiciones angulares para las 12 cámaras (30° cada una, arrancando a las 12 en punto con C1) */
+        /* Posiciones angulares para las 12 cámaras (sentido horario arrancando a las 12 en punto) */
         .pos-0  { top: 7%;   left: 50%; }   /* Cámara 1 */
-        .pos-1  { top: 13%;  left: 71.5%; } /* Cámara 2 (Aceite) */
+        .pos-1  { top: 13%;  left: 71.5%; } /* Cámara 2 */
         .pos-2  { top: 28.5%; left: 87%; }  /* Cámara 3 */
         .pos-3  { top: 50%;  left: 93%; }   /* Cámara 4 */
         .pos-4  { top: 71.5%; left: 87%; }  /* Cámara 5 */
@@ -57,50 +57,78 @@
                 <span class="text-lg md:text-xl font-bold text-slate-400 tracking-wide">| PLANTA B</span>
             </div>
             <h1 class="text-xl md:text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">
-                Distribución de Flujos y Ruteo Dinámico de Stock
+                Dinámica de almacenamiento en cámaras de frío
             </h1>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             
-            <div class="lg:col-span-5 space-y-5">
+            <div class="lg:col-span-5 space-y-4">
                 
                 <div class="grid grid-cols-2 gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                     <div class="text-center border-r border-slate-100">
-                        <span class="text-[9px] text-slate-400 block font-bold tracking-wider uppercase">Circuito Activo B1</span>
-                        <span id="kpi-b1" class="text-base md:text-xl font-black text-blue-600">Cámara 1</span>
+                        <span class="text-[9px] text-slate-400 block font-bold tracking-wider uppercase">Ingreso Activo B1</span>
+                        <span id="kpi-b1" class="text-base md:text-lg font-black text-blue-600">Cámara 1</span>
                     </div>
                     <div class="text-center">
-                        <span class="text-[9px] text-slate-400 block font-bold tracking-wider uppercase">Ingreso + Interplanta B2/B3</span>
-                        <span id="kpi-b23" class="text-base md:text-xl font-black text-orange-600">Cámara 5</span>
+                        <span class="text-[9px] text-slate-400 block font-bold tracking-wider uppercase">Ingreso B2 / B3 + Interplanta</span>
+                        <span id="kpi-b23" class="text-base md:text-lg font-black text-orange-600">Cámara 5</span>
                     </div>
                 </div>
 
-                <div class="bg-white border border-slate-200 rounded-2xl p-4 md:p-6 shadow-sm">
+                <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
-                            Secuencia Logística por Pasos
+                            Secuencia Operativa
                         </h2>
                         <span id="contador-pasos" class="text-xs font-bold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200">Paso 1</span>
                     </div>
 
                     <div class="grid grid-cols-12 gap-2 mb-4">
-                        <button onclick="retrocederPaso()" class="col-span-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-2 rounded-xl transition flex items-center justify-center gap-1 cursor-pointer text-xs tracking-wide border border-slate-200/60">
-                            <span>◀</span> Volver
+                        <button onclick="retrocederPaso()" class="col-span-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-2 rounded-xl transition flex items-center justify-center gap-1 cursor-pointer text-xs border border-slate-200/60">
+                            ◀ Volver
                         </button>
-                        <button id="btn-siguiente" onclick="avanzarPaso()" class="col-span-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition shadow-md shadow-indigo-600/10 flex items-center justify-center gap-2 cursor-pointer text-xs md:text-sm tracking-wide">
-                            Avanzar Paso <span>▶</span>
+                        <button id="btn-siguiente" onclick="avanzarPaso()" class="col-span-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl transition shadow-md shadow-indigo-600/10 flex items-center justify-center gap-2 cursor-pointer text-xs tracking-wide">
+                            Avanzar Paso ▶
                         </button>
-                        <button onclick="reiniciarSimulacion()" class="col-span-3 bg-slate-50 hover:bg-slate-100 text-slate-500 font-medium py-3 px-2 rounded-xl transition cursor-pointer text-xs border border-slate-200/40">
+                        <button onclick="reiniciarSimulacion()" class="col-span-3 bg-slate-50 hover:bg-slate-100 text-slate-500 font-medium py-2.5 px-2 rounded-xl transition cursor-pointer text-xs border border-slate-200/40">
                             Reiniciar
                         </button>
                     </div>
 
-                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/60 relative overflow-hidden">
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/60 relative overflow-hidden">
                         <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-600"></div>
-                        <div class="text-xs md:text-sm font-medium text-slate-600" id="datos-operacion">
+                        <div class="text-xs font-medium text-slate-600 leading-relaxed" id="datos-operacion">
                             </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-2.5 shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Estructura Actual de Planta B</h3>
+                    
+                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-200/50">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-slate-800">BLOCK 1</span>
+                            <span class="text-[10px] text-slate-400 font-medium">NFC y Pulpa (C1, C3, C4)</span>
+                        </div>
+                        <span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md border border-blue-200">Rotativo</span>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-200/50">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-slate-800">BLOCK 2</span>
+                            <span class="text-[10px] text-slate-400 font-medium">Jugo Turbio y Claro (C5 al C8)</span>
+                        </div>
+                        <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-md border border-indigo-200">Secuencial</span>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-200/50">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-slate-800">BLOCK 3</span>
+                            <span class="text-[10px] text-slate-400 font-medium">Jugo Turbio y Claro (C9 al C12)</span>
+                        </div>
+                        <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-md border border-indigo-200">Secuencial</span>
                     </div>
                 </div>
             </div>
@@ -120,14 +148,14 @@
                     <div id="reloj-camaras" class="absolute inset-0 w-full h-full"></div>
                 </div>
 
-                <div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2 pt-4 border-t border-slate-100 text-[9px] md:text-[10px] font-semibold text-slate-500">
+                <div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2 pt-4 border-t border-slate-100 text-[9px] font-bold text-slate-500">
                     <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60">
                         <div class="w-2.5 h-2.5 bg-blue-500 animate-pulse rounded"></div>
-                        <span>Ingreso B1 (NFC)</span>
+                        <span>Ingreso B1</span>
                     </div>
                     <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60">
                         <div class="w-2.5 h-2.5 bg-orange-500 animate-pulse rounded"></div>
-                        <span>Ingreso B2/B3 + Interplanta</span>
+                        <span>Ingreso B2/B3 + Inter.</span>
                     </div>
                     <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60">
                         <div class="w-2.5 h-2.5 bg-amber-600 rounded"></div>
@@ -144,22 +172,19 @@
 
     <script>
         const camarasConfig = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        const circuitoB1 = [1, 3, 4]; // Saltando la C2 de aceite
-        const circuitoB23 = [5, 6, 7, 8, 9, 10, 11, 12];
-        
         let pasoActual = 0;
 
-        // Generación de la matriz por Pasos sin atarse a días de la semana
+        // Secuencia lógica limpia por Pasos
         const cronogramaPasos = [
-            { paso: "Paso 1", b1: 1, b23: 5, obs: "Inicio de ciclo. Cámara 1 absorbe NFC/Pulpa. Cámara 5 centraliza la producción de jugos y la recepción de camiones de Interplanta A." },
-            { paso: "Paso 2", b1: 3, b23: 6, obs: "Rotación secuencial. El ruteo de NFC salta a la Cámara 3 (C2 permanece aislada). El flujo de jugos e Interplanta avanza en sentido horario a la Cámara 6." },
-            { paso: "Paso 3", b1: 4, b23: 7, obs: "Bloque 1 avanza a Cámara 4 para completar su circuito. El Bloque de jugos se desplaza a la Cámara 7 para la consolidación diaria." },
-            { paso: "Paso 4", b1: 1, b23: 8, obs: "Reinicio de anillo en Block 1 regresando a Cámara 1. En paralelo, el caudal de jugos e Interplanta se deriva a la Cámara 8." },
-            { paso: "Paso 5", b1: 3, b23: 9, obs: "Ingreso activo en Cámara 3 para NFC. El ruteo de jugos y recepción externa se unifica de manera limpia en la Cámara 9." },
-            { paso: "Paso 6", b1: 4, b23: 10, obs: "Flujo balanceado: Block 1 rutea a Cámara 4. Las cámaras de jugo Claro y Turbio avanzan la recepción a la Cámara 10." },
-            { paso: "Paso 7", b1: 1, b23: 11, obs: "Block 1 opera en Cámara 1. El canal masivo de jugos e ingresos consolidados se transfiere a la Cámara 11." },
-            { paso: "Paso 8", b1: 3, b23: 12, obs: "Último tramo del anillo: NFC ingresa en Cámara 3. El circuito de jugos cierra su rotación de 8 celdas en la Cámara 12." },
-            { paso: "Paso 9", b1: 4, b23: 5, obs: "Sincronismo total: Block 1 rutea a la 4 y el gran bloque de jugos reinicia su secuencia horaria volviendo a abrir la Cámara 5." }
+            { paso: "Paso 1", b1: 1, b23: 5, obs: "Cámara 1 activa para NFC/Pulpa. Cámara 5 (Block 2) unifica el ingreso diario y la descarga de camiones de Interplanta." },
+            { paso: "Paso 2", b1: 3, b23: 6, obs: "NFC rota hacia Cámara 3 (C2 queda saltada de forma permanente). El flujo de jugos e Interplanta avanza en sentido horario a Cámara 6." },
+            { paso: "Paso 3", b1: 4, b23: 7, obs: "Block 1 asigna el ingreso a Cámara 4. Las líneas de jugo Turbio/Claro desplazan la recepción activa a Cámara 7." },
+            { paso: "Paso 4", b1: 1, b23: 8, obs: "Block 1 reinicia ciclo en Cámara 1. Block 2 abre su última posición en Cámara 8 absorbiendo la totalidad del caudal diario." },
+            { paso: "Paso 5", b1: 3, b23: 9, obs: "Ingreso de NFC en Cámara 3. El circuito de jugos salta al Block 3 abriendo Cámara 9 como pulmón receptor general." },
+            { paso: "Paso 6", b1: 4, b23: 10, obs: "Block 1 opera sobre Cámara 4. El ruteo de jugos propios y la consolidación de externos avanza a Cámara 10." },
+            { paso: "Paso 7", b1: 1, b23: 11, obs: "Reinicio rotativo en Cámara 1 para Block 1. Las líneas masivas de jugo Claro/Turbio se derivan hacia Cámara 11." },
+            { paso: "Paso 8", b1: 3, b23: 12, obs: "Block 1 asigna Cámara 3. El circuito unificado de jugos cierra la secuencia horaria abriendo la Cámara 12." },
+            { paso: "Paso 9", b1: 4, b23: 5, obs: "Sincronismo completo: Block 1 rutea a la 4 y el circuito de jugos (B2/B3) reinicia el anillo volviendo a Cámara 5." }
         ];
 
         function renderizarReloj() {
@@ -175,18 +200,15 @@
                 let shadowGlow = 'shadow-sm';
 
                 if (num === 2) {
-                    // Cámara de Aceite fija
                     cardEstilos = 'bg-amber-50/40 border-amber-500 text-amber-900';
                     badgeEstilos = 'bg-amber-600 text-white font-bold';
                     textoEstado = 'ACEITE';
                 } else if (num === datosActuales.b1) {
-                    // Ingreso activo Block 1
                     cardEstilos = 'bg-blue-50 border-blue-400 text-blue-900 ring-1 ring-blue-200/50';
                     badgeEstilos = 'bg-blue-500 text-white font-bold animate-pulse';
                     textoEstado = 'ING. B1';
                     shadowGlow = 'shadow-md shadow-blue-500/5';
                 } else if (num === datosActuales.b23) {
-                    // Ingreso consolidado + Interplanta Block 2 y 3
                     cardEstilos = 'bg-orange-50 border-orange-400 text-orange-900 ring-1 ring-orange-200/50';
                     badgeEstilos = 'bg-orange-500 text-white font-black animate-pulse';
                     textoEstado = 'ING + INTER';
@@ -210,7 +232,7 @@
             document.getElementById('kpi-b23').innerText = `Cámara ${datos.b23}`;
             document.getElementById('contador-pasos').innerText = datos.paso;
             document.getElementById('datos-operacion').innerHTML = `
-                <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-wider mb-1">Evolución Dinámica del Flujo:</span>
+                <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-wider mb-1">Evolución del Flujo Operativo:</span>
                 ${datos.obs}
             `;
         }
