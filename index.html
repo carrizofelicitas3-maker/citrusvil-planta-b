@@ -6,17 +6,11 @@
     <title>Citrusvil | Planta B</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        .clock-container {
+        .block-ring {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-        }
-        @media (min-width: 640px) {
-            .clock-container {
-                width: 420px;
-                height: 420px;
-            }
         }
         .camara-node {
             position: absolute;
@@ -24,19 +18,11 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Posiciones angulares para las 12 cámaras (sentido horario arrancando a las 12 en punto) */
-        .pos-0  { top: 7%;   left: 50%; }   /* Cámara 1 */
-        .pos-1  { top: 13%;  left: 71.5%; } /* Cámara 2 */
-        .pos-2  { top: 28.5%; left: 87%; }  /* Cámara 3 */
-        .pos-3  { top: 50%;  left: 93%; }   /* Cámara 4 */
-        .pos-4  { top: 71.5%; left: 87%; }  /* Cámara 5 */
-        .pos-5  { top: 87%;  left: 71.5%; } /* Cámara 6 */
-        .pos-6  { top: 93%;  left: 50%; }   /* Cámara 7 */
-        .pos-7  { top: 87%;  left: 28.5%; } /* Cámara 8 */
-        .pos-8  { top: 71.5%; left: 13%; }  /* Cámara 9 */
-        .pos-9  { top: 50%;  left: 7%; }    /* Cámara 10 */
-        .pos-10 { top: 28.5%; left: 13%; }  /* Cámara 11 */
-        .pos-11 { top: 13%;  left: 28.5%; } /* Cámara 12 */
+        /* Disposición en Cruz Perfecta para 4 Cámaras por Reloj (12, 3, 6, 9 en punto) */
+        .pos-0 { top: 15%; left: 50%; }
+        .pos-1 { top: 50%; left: 85%; }
+        .pos-2 { top: 85%; left: 50%; }
+        .pos-3 { top: 50%; left: 15%; }
 
         @keyframes spin-clockwise {
             from { transform: rotate(0deg); }
@@ -49,7 +35,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen font-sans antialiased">
 
-    <div class="max-w-6xl mx-auto p-4 md:p-8">
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
         
         <header class="border-b border-slate-200 pb-5 mb-6">
             <div class="flex items-baseline gap-3">
@@ -61,122 +47,114 @@
             </h1>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            
-            <div class="lg:col-span-5 space-y-4">
-                
-                <div class="grid grid-cols-2 gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="text-center border-r border-slate-100">
-                        <span class="text-[9px] text-slate-400 block font-bold tracking-wider uppercase">Ingreso Activo B1</span>
-                        <span id="kpi-b1" class="text-base md:text-lg font-black text-blue-600">Cámara 1</span>
-                    </div>
-                    <div class="text-center">
-                        <span class="text-[9px] text-slate-400 block font-bold tracking-wider uppercase">Ingreso B2 / B3 + Interplanta</span>
-                        <span id="kpi-b23" class="text-base md:text-lg font-black text-orange-600">Cámara 5</span>
-                    </div>
-                </div>
-
-                <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center mb-6">
+            <div class="md:col-span-4 bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
                         <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
-                            Secuencia Operativa
+                            Secuencia por Pasos
                         </h2>
-                        <span id="contador-pasos" class="text-xs font-bold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full border border-slate-200">Paso 1</span>
+                        <span id="contador-pasos" class="text-xs font-bold text-slate-600 mt-0.5 block">Paso 1</span>
                     </div>
-
-                    <div class="grid grid-cols-12 gap-2 mb-4">
-                        <button onclick="retrocederPaso()" class="col-span-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-2 rounded-xl transition flex items-center justify-center gap-1 cursor-pointer text-xs border border-slate-200/60">
-                            ◀ Volver
-                        </button>
-                        <button id="btn-siguiente" onclick="avanzarPaso()" class="col-span-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl transition shadow-md shadow-indigo-600/10 flex items-center justify-center gap-2 cursor-pointer text-xs tracking-wide">
-                            Avanzar Paso ▶
-                        </button>
-                        <button onclick="reiniciarSimulacion()" class="col-span-3 bg-slate-50 hover:bg-slate-100 text-slate-500 font-medium py-2.5 px-2 rounded-xl transition cursor-pointer text-xs border border-slate-200/40">
-                            Reiniciar
-                        </button>
-                    </div>
-
-                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/60 relative overflow-hidden">
-                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-600"></div>
-                        <div class="text-xs font-medium text-slate-600 leading-relaxed" id="datos-operacion">
-                            </div>
-                    </div>
-                </div>
-
-                <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-2.5 shadow-sm">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Estructura Actual de Planta B</h3>
-                    
-                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-200/50">
-                        <div class="flex flex-col">
-                            <span class="text-xs font-bold text-slate-800">BLOCK 1</span>
-                            <span class="text-[10px] text-slate-400 font-medium">NFC y Pulpa (C1, C3, C4)</span>
-                        </div>
-                        <span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md border border-blue-200">Rotativo</span>
-                    </div>
-
-                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-200/50">
-                        <div class="flex flex-col">
-                            <span class="text-xs font-bold text-slate-800">BLOCK 2</span>
-                            <span class="text-[10px] text-slate-400 font-medium">Jugo Turbio y Claro (C5 al C8)</span>
-                        </div>
-                        <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-md border border-indigo-200">Secuencial</span>
-                    </div>
-
-                    <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-200/50">
-                        <div class="flex flex-col">
-                            <span class="text-xs font-bold text-slate-800">BLOCK 3</span>
-                            <span class="text-[10px] text-slate-400 font-medium">Jugo Turbio y Claro (C9 al C12)</span>
-                        </div>
-                        <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-md border border-indigo-200">Secuencial</span>
+                    <div class="flex gap-1">
+                        <button onclick="retrocederPaso()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-xs font-bold transition cursor-pointer border border-slate-200/60">◀</button>
+                        <button onclick="avanzarPaso()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition shadow-md shadow-indigo-600/10 cursor-pointer">Avanzar ▶</button>
+                        <button onclick="reiniciarSimulacion()" class="bg-slate-50 hover:bg-slate-100 text-slate-400 px-2.5 py-2 rounded-lg text-xs border border-slate-200/40 cursor-pointer">⟳</button>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-7 flex flex-col items-center bg-white border border-slate-200 p-4 md:p-6 rounded-2xl shadow-sm">
+            <div class="md:col-span-8 bg-slate-100 border border-slate-200 p-4 rounded-xl flex items-center relative overflow-hidden h-[74px]">
+                <div class="absolute left-0 top-0 bottom-0 w-1 bg-indigo-600"></div>
+                <p class="text-xs md:text-sm font-medium text-slate-600 leading-relaxed pl-2" id="datos-operacion">
+                    </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col items-center">
+                <div class="text-center mb-4">
+                    <span class="text-[10px] font-black bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200 uppercase tracking-wider">Block 1</span>
+                    <h3 class="text-sm font-bold text-slate-800 mt-1">NFC y Pulpa</h3>
+                </div>
                 
-                <div class="clock-container my-4 bg-slate-50 border border-slate-100 flex items-center justify-center shadow-inner">
-                    
-                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white border border-slate-200 flex flex-col items-center justify-center text-center p-2 z-10 shadow-sm">
-                        <span class="text-[8px] text-slate-400 font-bold tracking-widest">PLANTA B</span>
-                        <span class="text-[10px] font-black text-indigo-600 tracking-wider">ANILLO 12C</span>
-                        <svg class="w-4 h-4 text-indigo-500 mt-1 animate-spin-clockwise" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="block-ring bg-slate-50 border border-slate-100 flex items-center justify-center shadow-inner my-2">
+                    <div class="w-16 h-16 rounded-full bg-white border border-slate-200 flex items-center justify-center z-10 shadow-sm">
+                        <svg class="w-4 h-4 text-blue-500 animate-spin-clockwise" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
                         </svg>
                     </div>
-                    
-                    <div id="reloj-camaras" class="absolute inset-0 w-full h-full"></div>
-                </div>
-
-                <div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2 pt-4 border-t border-slate-100 text-[9px] font-bold text-slate-500">
-                    <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                        <div class="w-2.5 h-2.5 bg-blue-500 animate-pulse rounded"></div>
-                        <span>Ingreso B1</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                        <div class="w-2.5 h-2.5 bg-orange-500 animate-pulse rounded"></div>
-                        <span>Ingreso B2/B3 + Inter.</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                        <div class="w-2.5 h-2.5 bg-amber-600 rounded"></div>
-                        <span>Aceites (Bloqueada)</span>
-                    </div>
-                    <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60">
-                        <div class="w-2.5 h-2.5 bg-emerald-600 rounded"></div>
-                        <span>Estanco (Resguardo)</span>
-                    </div>
+                    <div id="ring-b1" class="absolute inset-0 w-full h-full"></div>
                 </div>
             </div>
+
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col items-center">
+                <div class="text-center mb-4">
+                    <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-200 uppercase tracking-wider">Block 2</span>
+                    <h3 class="text-sm font-bold text-slate-800 mt-1">Jugo Turbio / Claro (I)</h3>
+                </div>
+                
+                <div class="block-ring bg-slate-50 border border-slate-100 flex items-center justify-center shadow-inner my-2">
+                    <div class="w-16 h-16 rounded-full bg-white border border-slate-200 flex items-center justify-center z-10 shadow-sm">
+                        <svg class="w-4 h-4 text-orange-500 animate-spin-clockwise" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+                        </svg>
+                    </div>
+                    <div id="ring-b2" class="absolute inset-0 w-full h-full"></div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex flex-col items-center">
+                <div class="text-center mb-4">
+                    <span class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-200 uppercase tracking-wider">Block 3</span>
+                    <h3 class="text-sm font-bold text-slate-800 mt-1">Jugo Turbio / Claro (II)</h3>
+                </div>
+                
+                <div class="block-ring bg-slate-50 border border-slate-100 flex items-center justify-center shadow-inner my-2">
+                    <div class="w-16 h-16 rounded-full bg-white border border-slate-200 flex items-center justify-center z-10 shadow-sm">
+                        <svg class="w-4 h-4 text-orange-500 animate-spin-clockwise" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+                        </svg>
+                    </div>
+                    <div id="ring-b3" class="absolute inset-0 w-full h-full"></div>
+                </div>
+            </div>
+
         </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white border border-slate-200 p-4 rounded-xl shadow-sm text-[10px] font-bold text-slate-500 mt-6">
+            <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60 justify-center">
+                <div class="w-2.5 h-2.5 bg-blue-500 animate-pulse rounded"></div>
+                <span>Ingreso B1 (NFC/Pulpa)</span>
+            </div>
+            <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60 justify-center">
+                <div class="w-2.5 h-2.5 bg-orange-500 animate-pulse rounded"></div>
+                <span>Ingreso B2/B3 + Interplanta</span>
+            </div>
+            <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60 justify-center">
+                <div class="w-2.5 h-2.5 bg-amber-600 rounded"></div>
+                <span>Sector Aceites (Bloqueada)</span>
+            </div>
+            <div class="flex items-center gap-1.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60 justify-center">
+                <div class="w-2.5 h-2.5 bg-emerald-600 rounded"></div>
+                <span>Estanco (Stock Guardado)</span>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        const camarasConfig = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         let pasoActual = 0;
 
-        // Secuencia lógica limpia por Pasos
+        // Distribución física real por relojes
+        const configB1 = [1, 2, 3, 4];   // C2 es Aceite fija
+        const configB2 = [5, 6, 7, 8];   // Block 2
+        const configB3 = [9, 10, 11, 12]; // Block 3
+
         const cronogramaPasos = [
-            { paso: "Paso 1", b1: 1, b23: 5, obs: "Cámara 1 activa para NFC/Pulpa. Cámara 5 (Block 2) unifica el ingreso diario y la descarga de camiones de Interplanta." },
+            { paso: "Paso 1", b1: 1, b23: 5, obs: "Cámara 1 activa para NFC/Pulpa. Cámara 5 (Block 2) unifica el ingreso diario de la planta y la descarga de camiones de Interplanta." },
             { paso: "Paso 2", b1: 3, b23: 6, obs: "NFC rota hacia Cámara 3 (C2 queda saltada de forma permanente). El flujo de jugos e Interplanta avanza en sentido horario a Cámara 6." },
             { paso: "Paso 3", b1: 4, b23: 7, obs: "Block 1 asigna el ingreso a Cámara 4. Las líneas de jugo Turbio/Claro desplazan la recepción activa a Cámara 7." },
             { paso: "Paso 4", b1: 1, b23: 8, obs: "Block 1 reinicia ciclo en Cámara 1. Block 2 abre su última posición en Cámara 8 absorbiendo la totalidad del caudal diario." },
@@ -184,57 +162,57 @@
             { paso: "Paso 6", b1: 4, b23: 10, obs: "Block 1 opera sobre Cámara 4. El ruteo de jugos propios y la consolidación de externos avanza a Cámara 10." },
             { paso: "Paso 7", b1: 1, b23: 11, obs: "Reinicio rotativo en Cámara 1 para Block 1. Las líneas masivas de jugo Claro/Turbio se derivan hacia Cámara 11." },
             { paso: "Paso 8", b1: 3, b23: 12, obs: "Block 1 asigna Cámara 3. El circuito unificado de jugos cierra la secuencia horaria abriendo la Cámara 12." },
-            { paso: "Paso 9", b1: 4, b23: 5, obs: "Sincronismo completo: Block 1 rutea a la 4 y el circuito de jugos (B2/B3) reinicia el anillo volviendo a Cámara 5." }
+            { paso: "Paso 9", b1: 4, b23: 5, obs: "Sincronismo completo: Block 1 rutea a la 4 y el circuito de jugos (B2/B3) reinicia el anillo volviendo a abrir la Cámara 5." }
         ];
 
-        function renderizarReloj() {
-            const contenedor = document.getElementById('reloj-camaras');
+        function renderizarBloques() {
+            const datos = cronogramaPasos[pasoActual];
+            
+            // Actualizar textos informativos rápidos
+            document.getElementById('contador-pasos').innerText = `Visualizando: ${datos.paso}`;
+            document.getElementById('datos-operacion').innerHTML = `<strong>Evolución de Planta B:</strong> ${datos.obs}`;
+
+            // Render Anillo 1 (NFC / Pulpa)
+            renderAnillo('ring-b1', configB1, datos.b1, 'b1');
+            // Render Anillo 2 (Turbio / Claro I)
+            renderAnillo('ring-b2', configB2, datos.b23, 'b23');
+            // Render Anillo 3 (Turbio / Claro II)
+            renderAnillo('ring-b3', configB3, datos.b23, 'b23');
+        }
+
+        function renderAnillo(idContenedor, camaras, camaraActiva, tipoBlock) {
+            const contenedor = document.getElementById(idContenedor);
             contenedor.innerHTML = '';
 
-            const datosActuales = cronogramaPasos[pasoActual];
-
-            camarasConfig.forEach((num, index) => {
+            camaras.forEach((num, index) => {
                 let cardEstilos = 'bg-slate-50/60 border-slate-200 text-slate-400';
                 let badgeEstilos = 'bg-emerald-600 text-white font-medium';
                 let textoEstado = 'ESTANCO';
                 let shadowGlow = 'shadow-sm';
 
                 if (num === 2) {
-                    cardEstilos = 'bg-amber-50/40 border-amber-500 text-amber-900';
+                    cardEstilos = 'bg-amber-50/40 border-amber-400 text-amber-900';
                     badgeEstilos = 'bg-amber-600 text-white font-bold';
                     textoEstado = 'ACEITE';
-                } else if (num === datosActuales.b1) {
+                } else if (tipoBlock === 'b1' && num === camaraActiva) {
                     cardEstilos = 'bg-blue-50 border-blue-400 text-blue-900 ring-1 ring-blue-200/50';
                     badgeEstilos = 'bg-blue-500 text-white font-bold animate-pulse';
-                    textoEstado = 'ING. B1';
+                    textoEstado = 'INGRESO';
                     shadowGlow = 'shadow-md shadow-blue-500/5';
-                } else if (num === datosActuales.b23) {
+                } else if (tipoBlock === 'b23' && num === camaraActiva) {
                     cardEstilos = 'bg-orange-50 border-orange-400 text-orange-900 ring-1 ring-orange-200/50';
                     badgeEstilos = 'bg-orange-500 text-white font-black animate-pulse';
-                    textoEstado = 'ING + INTER';
+                    textoEstado = 'ING + INT';
                     shadowGlow = 'shadow-md shadow-orange-500/5';
                 }
 
                 contenedor.innerHTML += `
-                    <div class="camara-node pos-${index} ${shadowGlow} w-[58px] h-[58px] sm:w-[72px] sm:h-[72px] border rounded-xl flex flex-col items-center justify-center p-1 text-center select-none ${cardEstilos}">
-                        <span class="text-[7px] uppercase tracking-widest opacity-60 font-bold">Cam</span>
-                        <span class="text-base sm:text-lg font-black tracking-tight leading-none my-0.5">${num}</span>
-                        <span class="text-[6px] sm:text-[7px] px-1 py-0.2 rounded font-extrabold tracking-wide ${badgeEstilos}">${textoEstado}</span>
+                    <div class="camara-node pos-${index} ${shadowGlow} w-[46px] h-[46px] border rounded-lg flex flex-col items-center justify-center p-0.5 text-center select-none ${cardEstilos}">
+                        <span class="text-[12px] font-black tracking-tight leading-none">${num}</span>
+                        <span class="text-[5.5px] font-extrabold tracking-wide mt-0.5 uppercase ${badgeEstilos} px-0.5 rounded-sm">${textoEstado}</span>
                     </div>
                 `;
             });
-
-            actualizarMetricas(datosActuales);
-        }
-
-        function actualizarMetricas(datos) {
-            document.getElementById('kpi-b1').innerText = `Cámara ${datos.b1}`;
-            document.getElementById('kpi-b23').innerText = `Cámara ${datos.b23}`;
-            document.getElementById('contador-pasos').innerText = datos.paso;
-            document.getElementById('datos-operacion').innerHTML = `
-                <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-wider mb-1">Evolución del Flujo Operativo:</span>
-                ${datos.obs}
-            `;
         }
 
         function avanzarPaso() {
@@ -243,22 +221,23 @@
             } else {
                 pasoActual = 0; 
             }
-            renderizarReloj();
+            renderizarBloques();
         }
 
         function retrocederPaso() {
             if (pasoActual > 0) {
                 pasoActual--;
-                renderizarReloj();
+                renderizarBloques();
             }
         }
 
         function reiniciarSimulacion() {
             pasoActual = 0;
-            renderizarReloj();
+            renderizarBloques();
         }
 
-        renderizarReloj();
+        // Arranque inicial
+        renderizarBloques();
     </script>
 </body>
 </html>
