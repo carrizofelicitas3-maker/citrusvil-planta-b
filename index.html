@@ -19,11 +19,11 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Disposición en Cruz para las 4 cámaras de cada bloque */
-        .pos-0 { top: 12%; left: 50%; }
-        .pos-1 { top: 50%; left: 88%; }
-        .pos-2 { top: 88%; left: 50%; }
-        .pos-3 { top: 50%; left: 12%; }
+        /* Disposición física en Cruz Perfecta */
+        .pos-0 { top: 14%; left: 50%; }
+        .pos-1 { top: 50%; left: 86%; }
+        .pos-2 { top: 86%; left: 50%; }
+        .pos-3 { top: 50%; left: 14%; }
 
         @keyframes spin-clockwise {
             from { transform: rotate(0deg); }
@@ -79,14 +79,14 @@
                     </span>
                 </div>
                 <p class="text-xs font-semibold text-slate-600 mt-1 leading-relaxed">
-                    Cámaras mixtas para Jugo Turbio y Claro — Si la producción supera el límite del lote, se abre una cámara adicional en el mismo día.
+                    Cámaras mixtas para Jugo Turbio y Claro — Si la producción supera la capacidad de ingreso, se abre una cámara adicional en el mismo día.
                 </p>
             </div>
             <div class="lg:col-span-4 bg-white border border-slate-200 rounded-xl p-3 shadow-sm border-l-4 border-l-blue-500">
                 <div class="flex justify-between items-start">
                     <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Dinámica Block 1</span>
                     <span class="text-[10px] bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-md font-bold">
-                        Capacidad: 350 t/cám
+                        B1: 350 t/cám
                     </span>
                 </div>
                 <p class="text-xs font-semibold text-slate-600 mt-1 leading-relaxed">
@@ -105,8 +105,11 @@
                 <div class="flex flex-row items-center justify-center gap-12 relative w-full my-auto py-1">
                     <div class="flex flex-col items-center relative">
                         <span class="text-xs font-black text-slate-400 mb-2 tracking-widest">BLOCK 3</span>
-                        <div class="ring-large bg-slate-50 border border-slate-200/60 flex items-center justify-center shadow-inner rounded-full">
-                            <div id="ring-b3" class="absolute inset-0 w-full h-full"></div>
+                        <div class="ring-large bg-slate-50 border border-slate-200 flex items-center justify-center shadow-inner rounded-full">
+                            <div id="node-9" class="camara-node pos-0 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
+                            <div id="node-10" class="camara-node pos-1 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
+                            <div id="node-11" class="camara-node pos-2 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
+                            <div id="node-12" class="camara-node pos-3 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
                         </div>
                     </div>
 
@@ -116,8 +119,11 @@
 
                     <div class="flex flex-col items-center relative">
                         <span class="text-xs font-black text-slate-400 mb-2 tracking-widest">BLOCK 2</span>
-                        <div class="ring-large bg-slate-50 border border-slate-200/60 flex items-center justify-center shadow-inner rounded-full">
-                            <div id="ring-b2" class="absolute inset-0 w-full h-full"></div>
+                        <div class="ring-large bg-slate-50 border border-slate-200 flex items-center justify-center shadow-inner rounded-full">
+                            <div id="node-5" class="camara-node pos-0 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
+                            <div id="node-6" class="camara-node pos-1 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
+                            <div id="node-7" class="camara-node pos-2 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
+                            <div id="node-8" class="camara-node pos-3 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
                         </div>
                     </div>
                 </div>
@@ -130,13 +136,16 @@
 
                 <div class="flex flex-col items-center relative my-auto">
                     <span class="text-xs font-black text-slate-400 mb-2 tracking-widest">BLOCK 1</span>
-                    <div class="ring-large bg-slate-50 border border-slate-200/60 flex items-center justify-center shadow-inner rounded-full">
+                    <div class="ring-large bg-slate-50 border border-slate-200 flex items-center justify-center shadow-inner rounded-full">
                         <div class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center z-10 shadow-sm absolute">
                             <svg class="w-5 h-5 text-blue-500 animate-spin-clockwise" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
                             </svg>
                         </div>
-                        <div id="ring-b1" class="absolute inset-0 w-full h-full"></div>
+                        <div id="node-1" class="camara-node pos-0 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
+                        <div id="node-2" class="camara-node pos-1 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
+                        <div id="node-3" class="camara-node pos-2 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
+                        <div id="node-4" class="camara-node pos-3 w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none"></div>
                     </div>
                 </div>
             </div>
@@ -145,8 +154,8 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white border border-slate-200 p-3 rounded-xl shadow-sm text-[11px] font-bold text-slate-500">
             <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200/60 justify-center">
-                <div class="w-3 h-3 bg-orange-500 rounded animate-pulse"></div>
-                <div class="w-3 h-3 bg-blue-500 rounded animate-pulse"></div>
+                <div class="w-3 h-3 bg-orange-500 rounded"></div>
+                <div class="w-3 h-3 bg-blue-500 rounded"></div>
                 <span>Ingreso Parcial</span>
                 <div class="w-3 h-3 bg-amber-600 rounded ml-2"></div>
                 <span>Al Límite (Llena)</span>
@@ -170,9 +179,9 @@
         const camarasB1 = [1, 2, 3, 4];   
         const camarasB2 = [5, 6, 7, 8];   
         const camarasB3 = [9, 10, 11, 12]; 
+        const todasLasCamaras = [...camarasB1, ...camarasB2, ...camarasB3];
 
         const CAPACIDADES = { b3: 550, b2: 350, b1: 350 };
-
         const circuitoJugo = [9, 10, 11, 12, 5, 6, 7, 8];
         const circuitoNFC = [1, 3, 4]; 
 
@@ -191,7 +200,7 @@
         function calcularAsignacionSectores(diaIdx) {
             let infoSectores = { jugo: {}, nfc: {} };
 
-            // ---- SECTOR JUGO ----
+            // ---- LÓGICA JUGO ----
             let punteroJugoIdx = 0;
             for (let d = 0; d <= diaIdx; d++) {
                 let prod = datosDiasPrueba[d].prodJugo;
@@ -219,16 +228,11 @@
                         punteroJugoIdx = (punteroSecundarioIdx + 1) % circuitoJugo.length;
                     }
                 } else {
-                    if (prod <= capPrincipal) {
-                        punteroJugoIdx = (punteroJugoIdx + 1) % circuitoJugo.length;
-                    } else {
-                        let punteroSecundarioIdx = (punteroJugoIdx + 1) % circuitoJugo.length;
-                        punteroJugoIdx = (punteroSecundarioIdx + 1) % circuitoJugo.length;
-                    }
+                    punteroJugoIdx = (prod <= capPrincipal) ? (punteroJugoIdx + 1) % circuitoJugo.length : ((punteroJugoIdx + 1) % circuitoJugo.length + 1) % circuitoJugo.length;
                 }
             }
 
-            // ---- SECTOR NFC Y PULPA ----
+            // ---- LÓGICA NFC Y PULPA ----
             let punteroNFCIdx = 0;
             for (let d = 0; d <= diaIdx; d++) {
                 let prod = datosDiasPrueba[d].prodNFC;
@@ -254,12 +258,7 @@
                         punteroNFCIdx = (punterSecundarioIdx + 1) % circuitoNFC.length;
                     }
                 } else {
-                    if (prod <= capPrincipal) {
-                        punteroNFCIdx = (punterNFCIdx + 1) % circuitoNFC.length;
-                    } else {
-                        let punteroSecundarioIdx = (punterNFCIdx + 1) % circuitoNFC.length;
-                        punterNFCIdx = (punterSecundarioIdx + 1) % circuitoNFC.length;
-                    }
+                    punterNFCIdx = (prod <= capPrincipal) ? (punterNFCIdx + 1) % circuitoNFC.length : ((punterNFCIdx + 1) % circuitoNFC.length + 1) % circuitoNFC.length;
                 }
             }
 
@@ -268,83 +267,79 @@
 
         function renderizarPantalla() {
             const datosDia = datosDiasPrueba[diaActualIndex];
-            
             document.getElementById('contador-pasos').innerText = `Día ${datosDia.dia}`;
             document.getElementById('info-produccion').innerText = 
-                `Producción del día — Jugos: ${datosDia.prodJugo} tambores | NFC y Pulpa: ${datosDia.prodNFC} tambores`;
+                `Producción del día — Jugos: ${datosDia.prodJugo} t | NFC y Pulpa: ${datosDia.prodNFC} t`;
 
-            const asignacionActual = calcularAsignacionSectores(diaActualIndex);
+            const asignacion = calcularAsignacionSectores(diaActualIndex);
 
-            renderAnillo('ring-b3', camarasB3, asignacionActual.jugo, 'b3');
-            renderAnillo('ring-b2', camarasB2, asignacionActual.jugo, 'b2');
-            renderAnillo('ring-b1', camarasB1, asignacionActual.nfc, 'b1');
-        }
+            // Actualizar individualmente cada nodo ya existente en el DOM
+            todasLasCamaras.forEach(num => {
+                const el = document.getElementById(`node-${num}`);
+                if (!el) return;
 
-        function renderAnillo(idContenedor, camaras, asignacionSector, tipoBlock) {
-            const contenedor = document.getElementById(idContenedor);
-            contenedor.innerHTML = '';
-
-            camaras.forEach((num, index) => {
-                // Clases explícitas por defecto para evitar problemas con compilación dinámica
-                let cardEstilos = 'bg-slate-50 border-slate-200 text-slate-400';
-                let badgeEstilos = 'bg-emerald-600 text-white';
-                let textoEstado = 'VACÍA';
-                let shadowGlow = 'shadow-sm';
-                let iconCamion = '<span class="text-xs block opacity-0">🚚</span>';
+                let tipoBlock = camarasB1.includes(num) ? 'b1' : (camarasB2.includes(num) ? 'b2' : 'b3');
                 let capMax = CAPACIDADES[tipoBlock];
-                let txtVolumen = `0 / ${capMax} u.`;
+                
+                // Valores por defecto (Cámara Vacía)
+                let bgClasses = 'bg-slate-50 border-slate-200 text-slate-400';
+                let badgeClasses = 'bg-emerald-600 text-white';
+                let txtEstado = 'VACÍA';
+                let txtVolumen = `0 / ${capMax} t`;
+                let opCamion = 'opacity-0';
 
+                // Caso Especial: Cámara 2 Bloqueada por Aceites
                 if (num === 2) {
-                    cardEstilos = 'bg-red-50 border-red-600 text-red-900 font-extrabold ring-2 ring-red-100';
-                    badgeEstilos = 'bg-red-600 text-white font-bold';
-                    textoEstado = 'BLOQUEADA';
+                    bgClasses = 'bg-red-50 border-red-500 text-red-900 font-extrabold ring-2 ring-red-100';
+                    badgeClasses = 'bg-red-600 text-white font-bold';
+                    txtEstado = 'BLOQ';
                     txtVolumen = 'NO DISP.';
+                    opCamion = 'opacity-0';
                 } 
-                else if (asignacionSector[num]) {
-                    let datoCamara = asignacionSector[num];
-                    txtVolumen = `${datoCamara.volumen} / ${capMax} u.`;
-                    iconCamion = '<span class="text-xs block">🚚</span>';
-                    shadowGlow = 'shadow-md';
+                // Verificar si tiene asignación activa hoy
+                else {
+                    let asignacionCamara = camarasB1.includes(num) ? asignacion.nfc[num] : asignacion.jugo[num];
+                    
+                    if (asignacionCamara) {
+                        txtVolumen = `${asignacionCamara.volumen} / ${capMax} t`;
+                        opCamion = 'opacity-100';
 
-                    if (datoCamara.llena) {
-                        cardEstilos = 'bg-amber-50 border-amber-600 text-amber-900 ring-2 ring-amber-200';
-                        badgeEstilos = 'bg-amber-700 text-white font-black animate-pulse';
-                        textoEstado = 'LLENA';
-                    } else {
-                        // Asignación de estilos 100% explícita para asegurar render en Tailwind v4
-                        if (tipoBlock === 'b1') {
-                            cardEstilos = 'bg-blue-50 border-blue-500 text-blue-900 ring-2 ring-blue-200';
-                            badgeEstilos = 'bg-blue-500 text-white font-bold animate-pulse';
+                        if (asignacionCamara.llena) {
+                            bgClasses = 'bg-amber-50 border-amber-600 text-amber-900 ring-2 ring-amber-200';
+                            badgeClasses = 'bg-amber-700 text-white font-black animate-pulse';
+                            txtEstado = 'LLENA';
                         } else {
-                            cardEstilos = 'bg-orange-50 border-orange-500 text-orange-900 ring-2 ring-orange-200';
-                            badgeEstilos = 'bg-orange-500 text-white font-bold animate-pulse';
+                            txtEstado = asignacionCamara.estado;
+                            if (tipoBlock === 'b1') {
+                                bgClasses = 'bg-blue-50 border-blue-500 text-blue-900 ring-2 ring-blue-200';
+                                badgeClasses = 'bg-blue-500 text-white font-bold animate-pulse';
+                            } else {
+                                bgClasses = 'bg-orange-50 border-orange-500 text-orange-900 ring-2 ring-orange-200';
+                                badgeClasses = 'bg-orange-500 text-white font-bold animate-pulse';
+                            }
                         }
-                        textoEstado = datoCamara.estado;
                     }
                 }
 
-                contenedor.innerHTML += `
-                    <div class="camara-node pos-${index} ${shadowGlow} w-[88px] h-[88px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none ${cardEstilos}">
-                        <div class="leading-none">
-                            <span class="text-[7px] font-bold opacity-60 block">CÁMARA</span>
-                            <span class="text-base font-black tracking-tight block">${num}</span>
-                        </div>
-                        <span class="text-[7px] font-black tracking-wider uppercase px-1 py-0.5 rounded-xs text-center ${badgeEstilos}">${textoEstado}</span>
-                        <div class="leading-none flex flex-col items-center">
-                            <span class="text-[7px] font-extrabold block tracking-tighter opacity-80">${txtVolumen}</span>
-                            ${iconCamion}
-                        </div>
+                // Inyectar la estructura interna manteniendo intacto el nodo y sus clases dinámicas via JS
+                el.className = `camara-node pos-${camarasB1.includes(num) ? camarasB1.indexOf(num) : (camarasB2.includes(num) ? camarasB2.indexOf(num) : camarasB3.indexOf(num))} w-[86px] h-[86px] border rounded-xl flex flex-col items-center justify-between p-1.5 text-center select-none ${bgClasses}`;
+                
+                el.innerHTML = `
+                    <div class="leading-none">
+                        <span class="text-[7px] font-bold opacity-60 block">CÁMARA</span>
+                        <span class="text-base font-black tracking-tight block">${num}</span>
+                    </div>
+                    <span class="text-[7px] font-black tracking-wider uppercase px-1 py-0.5 rounded-xs text-center ${badgeClasses}">${txtEstado}</span>
+                    <div class="leading-none flex flex-col items-center">
+                        <span class="text-[7px] font-extrabold block tracking-tighter opacity-80">${txtVolumen}</span>
+                        <span class="text-xs block ${opCamion}">🚚</span>
                     </div>
                 `;
             });
         }
 
         function advancedPaso() {
-            if (diaActualIndex < datosDiasPrueba.length - 1) {
-                diaActualIndex++;
-            } else {
-                diaActualIndex = 0; 
-            }
+            diaActualIndex = (diaActualIndex < datosDiasPrueba.length - 1) ? diaActualIndex + 1 : 0;
             renderizarPantalla();
         }
 
