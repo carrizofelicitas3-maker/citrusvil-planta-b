@@ -64,7 +64,7 @@
                     Mando Central de Simulación por Capacidad
                 </h2>
                 <span id="contador-pasos" class="text-sm font-black text-slate-800 mt-0.5 block">Día 1</span>
-                <span id="info-produccion" class="text-[11px] text-slate-500 font-semibold block mt-0.5">Cargando flujo de planta...</span>
+                <span id="info-produccion" class="text-[11px] text-slate-500 font-semibold block mt-0.5">Cargando producción...</span>
             </div>
             <div class="flex gap-2">
                 <button onclick="retrocederPaso()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border border-slate-200/60">
@@ -81,15 +81,25 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
             <div class="lg:col-span-8 bg-white border border-slate-200 rounded-xl p-3 shadow-sm border-l-4 border-l-orange-500">
-                <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wider block">Dinámica Block 3 y Block 2</span>
-                <p class="text-xs font-semibold text-slate-600 mt-0.5">
-                    Cámaras para Jugo Turbio y Claro — Si la producción supera la capacidad de la cámara, se abren dos en el mismo día.
+                <div class="flex justify-between items-start">
+                    <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wider block">Dinámica Block 3 y Block 2</span>
+                    <span class="text-[10px] bg-orange-50 text-orange-700 border border-orange-200 px-2 py-0.5 rounded-md font-extrabold uppercase">
+                        Capacidad: B3 = 550 t/cám | B2 = 350 t/cám
+                    </span>
+                </div>
+                <p class="text-xs font-semibold text-slate-600 mt-1">
+                    Cámaras para Jugo Turbio y Claro — Si la producción supera la capacidad de la cámara activa, se abren dos en el mismo día.
                 </p>
             </div>
             <div class="lg:col-span-4 bg-white border border-slate-200 rounded-xl p-3 shadow-sm border-l-4 border-l-blue-500">
-                <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider block">Dinámica Block 1</span>
-                <p class="text-xs font-semibold text-slate-600 mt-0.5">
-                    Cámaras para NFC y Pulpa — Si la producción supera la capacidad de la cámara, se abren dos en el mismo día.
+                <div class="flex justify-between items-start">
+                    <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider block">Dinámica Block 1</span>
+                    <span class="text-[10px] bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-md font-extrabold uppercase">
+                        Capacidad: B1 = 350 t/cám
+                    </span>
+                </div>
+                <p class="text-xs font-semibold text-slate-600 mt-1">
+                    Cámaras para NFC y Pulpa — Si la producción supera la capacidad de la cámara activa, se abren dos en el mismo día.
                 </p>
             </div>
         </div>
@@ -170,85 +180,67 @@
 
     <script>
         const todasLasCamaras = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        
-        // Capacidades nominales fijas por día
         const CAPACIDADES = { b3: 550, b2: 350, b1: 350 };
         
-        // Circuitos de rotación lineal estables
         const circuitoJugo = [9, 11, 12, 5, 6, 7, 8];
         const circuitoNFC = [1, 3, 4];
 
-        // Datos de simulación para testear ingresos simples y dobles (desbordes)
+        // Datos del Mando Central (Solo volúmenes)
         const datosDias = [
-            { dia: 1, jugo: 400, nfc: 200 }, // Ambos simples (1 cámara cada uno)
-            { dia: 2, jugo: 700, nfc: 300 }, // Jugo desborda (Abre 2 cámaras) | NFC simple
-            { dia: 3, jugo: 300, nfc: 500 }, // Jugo simple | NFC desborda (Abre 2 cámaras)
-            { dia: 4, jugo: 800, nfc: 250 }, // Jugo desborda (Abre 2 cámaras) | NFC simple
-            { dia: 5, jugo: 200, nfc: 400 }, // Jugo simple | NFC desborda (Abre 2 cámaras)
-            { dia: 6, jugo: 450, nfc: 150 }, // Ambos simples
-            { dia: 7, jugo: 900, nfc: 600 }  // Ambos desbordan al mismo tiempo
+            { dia: 1, jugo: 400, nfc: 200 }, 
+            { dia: 2, jugo: 700, nfc: 300 }, 
+            { dia: 3, jugo: 300, nfc: 500 }, 
+            { dia: 4, jugo: 800, nfc: 250 }, 
+            { dia: 5, jugo: 200, nfc: 400 }, 
+            { dia: 6, jugo: 450, nfc: 150 }, 
+            { dia: 7, jugo: 900, nfc: 600 }  
         ];
 
         let diaActualIndex = 0;
 
         function calcularEstadoCamaras(hastaDiaIdx) {
-            let estadoGlobal = {
-                activaHoy: [], // Cámaras que reciben camiones hoy
-                cerradasConStock: [] // Cámaras llenas en días previos
-            };
-
-            let pJugo = 0; // Puntero de posición del circuito Jugo
-            let pNFC = 0;  // Puntero de posición del circuito NFC
+            let estadoGlobal = { activaHoy: [], cerradasConStock: [] };
+            let pJugo = 0; 
+            let pNFC = 0;  
 
             for (let d = 0; d <= hastaDiaIdx; d++) {
                 let esHoy = (d === hastaDiaIdx);
                 let prodJugo = datosDias[d].jugo;
                 let prodNFC = datosDias[d].nfc;
 
-                // ---- PROCESAR CIRCUITO JUGO ----
+                // Jugos
                 let camJugo1 = circuitoJugo[pJugo];
                 let capJugo1 = (camJugo1 === 9 || camJugo1 === 11 || camJugo1 === 12) ? CAPACIDADES.b3 : CAPACIDADES.b2;
 
                 if (esHoy) estadoGlobal.activaHoy.push(camJugo1);
 
                 if (prodJugo <= capJugo1) {
-                    // Caso Simple: Se usa una sola cámara y el puntero avanza 1 casillero
-                    if (!esHoy && !estadoGlobal.cerradasConStock.includes(camJugo1)) {
-                        estadoGlobal.cerradasConStock.push(camJugo1);
-                    }
+                    if (!esHoy && !estadoGlobal.cerradasConStock.includes(camJugo1)) estadoGlobal.cerradasConStock.push(camJugo1);
                     pJugo = (pJugo + 1) % circuitoJugo.length;
                 } else {
-                    // Caso Desborde: Se abre una segunda cámara en paralelo
                     let siguienteIdx = (pJugo + 1) % circuitoJugo.length;
                     let camJugo2 = circuitoJugo[siguienteIdx];
-
                     if (esHoy) estadoGlobal.activaHoy.push(camJugo2);
-
                     if (!esHoy) {
                         if (!estadoGlobal.cerradasConStock.includes(camJugo1)) estadoGlobal.cerradasConStock.push(camJugo1);
                         if (!estadoGlobal.cerradasConStock.includes(camJugo2)) estadoGlobal.cerradasConStock.push(camJugo2);
                     }
-                    // El puntero avanza dejando atrás ambas cámaras abiertas
                     pJugo = (siguienteIdx + 1) % circuitoJugo.length;
                 }
 
-                // ---- PROCESAR CIRCUITO NFC ----
+                // NFC
                 let camNFC1 = circuitoNFC[pNFC];
                 let capNFC1 = CAPACIDADES.b1;
 
                 if (esHoy) estadoGlobal.activaHoy.push(camNFC1);
 
                 if (prodNFC <= capNFC1) {
-                    if (!esHoy && !estadoGlobal.cerradasConStock.includes(camNFC1)) {
-                        estadoGlobal.cerradasConStock.push(camNFC1);
-                    }
+                    if (!esHoy && !estadoGlobal.cerradasConStock.includes(camNFC1)) estadoGlobal.cerradasConStock.push(camNFC1);
                     pNFC = (pNFC + 1) % circuitoNFC.length;
                 } else {
                     let siguienteIdx = (pNFC + 1) % circuitoNFC.length;
                     let camNFC2 = circuitoNFC[siguienteIdx];
-
                     if (esHoy) estadoGlobal.activaHoy.push(camNFC2);
-
                     if (!esHoy) {
                         if (!estadoGlobal.cerradasConStock.includes(camNFC1)) estadoGlobal.cerradasConStock.push(camNFC1);
                         if (!estadoGlobal.cerradasConStock.includes(camNFC2)) estadoGlobal.cerradasConStock.push(camNFC2);
@@ -256,15 +248,16 @@
                     pNFC = (siguienteIdx + 1) % circuitoNFC.length;
                 }
             }
-
             return estadoGlobal;
         }
 
         function renderizarPantalla() {
             const infoDia = datosDias[diaActualIndex];
             document.getElementById('contador-pasos').innerText = `Día ${infoDia.dia}`;
+            
+            // Texto superior limpio: Solo volumen de producción
             document.getElementById('info-produccion').innerText = 
-                `Volumen Producido — Jugos: ${infoDia.jugo} t (Cap. ref: 550/350t) | NFC: ${infoDia.nfc} t (Cap. ref: 350t)`;
+                `Producción Real del Día — Jugos: ${infoDia.jugo} t | NFC y Pulpa: ${infoDia.nfc} t`;
 
             const mapaEstados = calcularEstadoCamaras(diaActualIndex);
 
@@ -277,32 +270,19 @@
                 let txtColor = '#0f172a';
                 let mostrarCamion = false;
 
-                // 1. Cámaras bloqueadas (Rojo absoluto, sin texto)
                 if (num === 2 || num === 10) {
-                    bgColor = '#dc2626';
-                    borderColor = '#991b1b';
-                    txtColor = '#ffffff';
-                }
-                // 2. Cámaras en proceso de ingreso activo hoy
-                else if (mapaEstados.activaHoy.includes(num)) {
-                    mostrarCamion = true;
-                    txtColor = '#ffffff';
+                    bgColor = '#dc2626'; borderColor = '#991b1b'; txtColor = '#ffffff';
+                } else if (mapaEstados.activaHoy.includes(num)) {
+                    mostrarCamion = true; txtColor = '#ffffff';
                     if (circuitoNFC.includes(num)) {
-                        bgColor = '#38bdf8'; // Azul para NFC
-                        borderColor = '#0284c7';
+                        bgColor = '#38bdf8'; borderColor = '#0284c7';
                     } else {
-                        bgColor = '#f97316'; // Naranja para Jugos
-                        borderColor = '#ea580c';
+                        bgColor = '#f97316'; borderColor = '#ea580c';
                     }
-                }
-                // 3. Cámaras cerradas con stock de ciclos/días anteriores
-                else if (mapaEstados.cerradasConStock.includes(num)) {
-                    bgColor = '#16a34a'; // Verde
-                    borderColor = '#15803d';
-                    txtColor = '#ffffff';
+                } else if (mapaEstados.cerradasConStock.includes(num)) {
+                    bgColor = '#16a34a'; borderColor = '#15803d'; txtColor = '#ffffff';
                 }
 
-                // Pintar elementos nativos del DOM
                 el.style.backgroundColor = bgColor;
                 el.style.borderColor = borderColor;
 
@@ -317,13 +297,8 @@
         }
 
         function advancedPaso() {
-            if (diaActualIndex < datosDias.length - 1) {
-                diaActualIndex++;
-                renderizarPantalla();
-            } else {
-                diaActualIndex = 0; // Reinicia bucle infinito al terminar los días
-                renderizarPantalla();
-            }
+            diaActualIndex = (diaActualIndex < datosDias.length - 1) ? diaActualIndex + 1 : 0;
+            renderizarPantalla();
         }
 
         function retrocederPaso() {
