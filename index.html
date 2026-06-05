@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citrusvil | Planta B (Simulación de Capacidad)</title>
+    <title>Citrusvil | Planta B</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     
     <style>
@@ -11,51 +11,36 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            width: 300px;
-            height: 300px;
-            gap: 8px;
-            padding: 8px;
+            width: 290px;
+            height: 290px;
+            gap: 12px;
+            padding: 16px;
             background: #f8fafc;
             border: 2px dashed #cbd5e1;
             border-radius: 1.5rem;
             position: relative;
         }
 
-        /* Forzar visualización al frente absoluto de la pantalla */
         .camara-box {
-            grid-area: auto;
             border: 3px solid #cbd5e1;
-            background-color: #ffffff !important;
+            background-color: #ffffff;
             border-radius: 0.75rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            padding: 0.5rem 0.25rem;
+            justify-content: center;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease;
-            min-height: 90px;
-            z-index: 50 !important; /* Al frente de todo */
+            min-height: 80px;
         }
         
-        /* Ubicaciones espaciales fijas en la grilla 3x3 */
+        /* Posiciones en la grilla 3x3 */
         .cruz-top    { grid-column: 2; grid-row: 1; }
         .cruz-left   { grid-column: 1; grid-row: 2; }
         .cruz-right  { grid-column: 3; grid-row: 2; }
         .cruz-bottom { grid-column: 2; grid-row: 3; }
-        .cruz-center { grid-column: 2; grid-row: 2; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #cbd5e1; font-weight: 300; }
-
-        .badge-status {
-            font-size: 9px;
-            font-weight: 900;
-            text-transform: uppercase;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: white;
-            line-height: 1;
-            display: inline-block;
-        }
+        .cruz-center { grid-column: 2; grid-row: 2; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #e2e8f0; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 h-screen overflow-hidden font-sans antialiased flex flex-col justify-between p-4 md:p-6">
@@ -76,10 +61,10 @@
             <div>
                 <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
-                    Mando Central de Simulación por Capacidad
+                    Mando Central de Simulación
                 </h2>
                 <span id="contador-pasos" class="text-sm font-black text-slate-800 mt-0.5 block">Día 1</span>
-                <span id="info-produccion" class="text-[11px] text-slate-500 font-semibold block mt-0.5">Iniciando paneles visuales...</span>
+                <span class="text-[11px] text-slate-500 font-semibold block mt-0.5">Monitoreo de ingresos secuenciales en circuito cerrado.</span>
             </div>
             <div class="flex gap-2">
                 <button onclick="retrocederPaso()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer border border-slate-200/60">
@@ -96,25 +81,15 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
             <div class="lg:col-span-8 bg-white border border-slate-200 rounded-xl p-3 shadow-sm border-l-4 border-l-orange-500">
-                <div class="flex justify-between items-start">
-                    <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wider">Dinámica Block 3 y Block 2</span>
-                    <span class="text-[10px] bg-orange-50 text-orange-700 border border-orange-200 px-2 py-0.5 rounded-md font-bold">
-                        B3: 550 t/cám | B2: 350 t/cám
-                    </span>
-                </div>
-                <p class="text-xs font-semibold text-slate-600 mt-1 leading-relaxed">
-                    Cámaras mixtas para Jugo Turbio y Claro — Si la producción supera la capacidad de ingreso, se abre una cámara adicional en el mismo día.
+                <span class="text-[10px] font-bold text-orange-600 uppercase tracking-wider block">Circuito Jugo Turbio y Claro</span>
+                <p class="text-xs font-semibold text-slate-600 mt-0.5">
+                    Rotación secuencial continua por las cámaras operativas de los Bloques 3 y 2.
                 </p>
             </div>
             <div class="lg:col-span-4 bg-white border border-slate-200 rounded-xl p-3 shadow-sm border-l-4 border-l-blue-500">
-                <div class="flex justify-between items-start">
-                    <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Dinámica Block 1</span>
-                    <span class="text-[10px] bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-md font-bold">
-                        B1: 350 t/cám
-                    </span>
-                </div>
-                <p class="text-xs font-semibold text-slate-600 mt-1 leading-relaxed">
-                    Cámaras mixtas para NFC y Pulpa — Si la producción supera la capacidad de ingreso, se abre una cámara adicional en el mismo día.
+                <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider block">Circuito NFC y Pulpa</span>
+                <p class="text-xs font-semibold text-slate-600 mt-0.5">
+                    Rotación secuencial continua por las cámaras operativas del Bloque 1.
                 </p>
             </div>
         </div>
@@ -132,7 +107,7 @@
                         <div class="bloque-industrial">
                             <div id="node-9" class="camara-box cruz-top"></div>
                             <div id="node-12" class="camara-box cruz-left"></div>
-                            <div class="cruz-center">○</div>
+                            <div class="cruz-center">∞</div>
                             <div id="node-10" class="camara-box cruz-right"></div>
                             <div id="node-11" class="camara-box cruz-bottom"></div>
                         </div>
@@ -145,7 +120,7 @@
                         <div class="bloque-industrial">
                             <div id="node-5" class="camara-box cruz-top"></div>
                             <div id="node-8" class="camara-box cruz-left"></div>
-                            <div class="cruz-center">○</div>
+                            <div class="cruz-center">∞</div>
                             <div id="node-6" class="camara-box cruz-right"></div>
                             <div id="node-7" class="camara-box cruz-bottom"></div>
                         </div>
@@ -187,163 +162,116 @@
                 <span>Cámara Cerrada (Con Stock)</span>
             </div>
             <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200/60 justify-center text-slate-400">
-                <span>Lógica: Desborde abre 2da cámara ➔ Avanza a posterior el próximo día.</span>
+                <span>Lógica: Secuencia limpia sin interrupciones.</span>
             </div>
         </div>
 
     </div>
 
     <script>
-        const camarasB1 = [1, 2, 3, 4];   
-        const camarasB2 = [5, 6, 7, 8];   
-        const camarasB3 = [9, 10, 11, 12]; 
-        const todasLasCamaras = [...camarasB1, ...camarasB2, ...camarasB3];
+        const todasLasCamaras = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        const camarasB1 = [1, 2, 3, 4];
 
-        const CAPACIDADES = { b3: 550, b2: 350, b1: 350 };
-        
+        // Circuitos limpios que completan la vuelta de forma infinita (excluyendo 2 y 10)
         const circuitoJugo = [9, 11, 12, 5, 6, 7, 8];
-        const circuitoNFC = [1, 3, 4];                
+        const circuitoNFC = [1, 3, 4];
 
-        const datosDiasPrueba = [
-            { dia: 1, prodJugo: 400, prodNFC: 250 },  
-            { dia: 2, prodJugo: 750, prodNFC: 300 },  
-            { dia: 3, prodJugo: 300, prodNFC: 450 },  
-            { dia: 4, prodJugo: 850, prodNFC: 500 },  
-            { dia: 5, prodJugo: 500, prodNFC: 200 },  
-            { dia: 6, prodJugo: 600, prodNFC: 150 },  
-            { dia: 7, prodJugo: 350, prodNFC: 300 }
-        ];
-
-        let diaActualIndex = 0;
-
-        function calcularAsignacionSectores(diaIdx) {
-            let historial = { jugo: {}, nfc: {} };
-            let punteroJugoIdx = 0;
-            let punteroNFCIdx = 0;
-
-            for (let d = 0; d <= diaIdx; d++) {
-                let prodJugo = datosDiasPrueba[d].prodJugo;
-                let prodNFC = datosDiasPrueba[d].prodNFC;
-                let esDiaActual = (d === diaIdx);
-
-                // Jugos
-                let camJugo1 = circuitoJugo[punteroJugoIdx];
-                let capJugo1 = CAPACIDADES[camarasB3.includes(camJugo1) ? 'b3' : 'b2'];
-
-                if (prodJugo <= capJugo1) {
-                    historial.jugo[camJugo1] = { volumen: prodJugo, estado: prodJugo === capJugo1 ? 'ING TOTAL' : 'ING PARCIAL', activaHoy: esDiaActual };
-                    punteroJugoIdx = (punteroJugoIdx + 1) % circuitoJugo.length;
-                } else {
-                    historial.jugo[camJugo1] = { volumen: capJugo1, estado: 'ING TOTAL', activaHoy: esDiaActual };
-                    let exc = prodJugo - capJugo1;
-                    let punteroSecJugoIdx = (punteroJugoIdx + 1) % circuitoJugo.length;
-                    let camJugo2 = circuitoJugo[punteroSecJugoIdx];
-                    let capJugo2 = CAPACIDADES[camarasB3.includes(camJugo2) ? 'b3' : 'b2'];
-                    let volSec = Math.min(exc, capJugo2);
-
-                    historial.jugo[camJugo2] = { volumen: volSec, estado: volSec === capJugo2 ? 'ING TOTAL' : 'ING PARCIAL', activaHoy: esDiaActual };
-                    punteroJugoIdx = (punteroSecJugoIdx + 1) % circuitoJugo.length;
-                }
-
-                // NFC
-                let camNFC1 = circuitoNFC[punteroNFCIdx];
-                let capNFC1 = CAPACIDADES.b1;
-
-                if (prodNFC <= capNFC1) {
-                    historial.nfc[camNFC1] = { volumen: prodNFC, estado: prodNFC === capNFC1 ? 'ING TOTAL' : 'ING PARCIAL', activaHoy: esDiaActual };
-                    punteroNFCIdx = (punteroNFCIdx + 1) % circuitoNFC.length;
-                } else {
-                    historial.nfc[camNFC1] = { volumen: capNFC1, estado: 'ING TOTAL', activaHoy: esDiaActual };
-                    let exc = prodNFC - capNFC1;
-                    let punteroSecNFCIdx = (punteroNFCIdx + 1) % circuitoNFC.length;
-                    let camNFC2 = circuitoNFC[punteroSecNFCIdx];
-                    let volSec = Math.min(exc, capNFC1);
-
-                    historial.nfc[camNFC2] = { volumen: volSec, estado: volSec === capNFC1 ? 'ING TOTAL' : 'ING PARCIAL', activaHoy: esDiaActual };
-                    punteroNFCIdx = (punterSecNFCIdx + 1) % circuitoNFC.length;
-                }
-            }
-            return historial;
-        }
+        let diaActual = 1;
 
         function renderizarPantalla() {
-            const datosDia = datosDiasPrueba[diaActualIndex];
-            document.getElementById('contador-pasos').innerText = `Día ${datosDia.dia}`;
-            document.getElementById('info-produccion').innerText = 
-                `Producción del día — Jugos: ${datosDia.prodJugo} t | NFC y Pulpa: ${datosDia.prodNFC} t`;
+            document.getElementById('contador-pasos').innerText = `Día ${diaActual}`;
 
-            const asignacion = calcularAsignacionSectores(diaActualIndex);
+            // Determinar qué cámara recibe ingreso hoy según el avance lineal del día
+            // Usamos el operador residuo (%) para asegurar que dé la vuelta infinitamente
+            const camaraActivaJugo = circuitoJugo[(diaActual - 1) % circuitoJugo.length];
+            const camaraActivaNFC = circuitoNFC[(diaActual - 1) % circuitoNFC.length];
 
             todasLasCamaras.forEach(num => {
                 const el = document.getElementById(`node-${num}`);
                 if (!el) return;
 
-                let tipoBlock = camarasB1.includes(num) ? 'b1' : (camarasB2.includes(num) ? 'b2' : 'b3');
-                let capMax = CAPACIDADES[tipoBlock];
-                
                 let bgColor = '#ffffff';
                 let borderColor = '#cbd5e1';
-                let badgeColor = '#94a3b8';
-                let txtEstado = 'VACÍA';
-                let txtVolumen = `0 / ${capMax} t`;
-                let displayCamion = 'none';
+                let txtColor = '#0f172a';
+                let mostrarCamion = false;
 
-                if (num === 2) {
-                    bgColor = '#fef2f2'; borderColor = '#dc2626'; badgeColor = '#dc2626'; txtEstado = 'ACEITE'; txtVolumen = 'B/SIST';
-                } else if (num === 10) {
-                    bgColor = '#fef2f2'; borderColor = '#dc2626'; badgeColor = '#dc2626'; txtEstado = 'AMPLIAC'; txtVolumen = 'B/SIST';
-                } else {
-                    let record = camarasB1.includes(num) ? asignacion.nfc[num] : asignacion.jugo[num];
-                    if (record) {
-                        txtVolumen = `${record.volumen} / ${capMax} t`;
-                        if (record.activaHoy) {
-                            displayCamion = 'block'; txtEstado = record.estado;
-                            if (tipoBlock === 'b1') {
-                                bgColor = '#e0f2fe'; borderColor = '#0ea5e9'; badgeColor = '#0ea5e9';
-                            } else {
-                                bgColor = '#ffedd5'; borderColor = '#f97316'; badgeColor = '#f97316';
-                            }
-                        } else {
-                            bgColor = '#dcfce7'; borderColor = '#16a34a'; badgeColor = '#16a34a'; txtEstado = 'CERRADA';
+                // 1. CÁMARAS FUERA DE CIRCUITO (Solo color rojo, sin textos raros)
+                if (num === 2 || num === 10) {
+                    bgColor = '#dc2626'; 
+                    borderColor = '#991b1b';
+                    txtColor = '#ffffff';
+                }
+                // 2. CÁMARAS DEL CIRCUITO JUGO
+                else if (circuitoJugo.includes(num)) {
+                    if (num === camaraActivaJugo) {
+                        bgColor = '#f97316'; // Naranja (Ingresando hoy)
+                        borderColor = '#ea580c';
+                        txtColor = '#ffffff';
+                        mostrarCamion = true;
+                    } else {
+                        // Si ya pasó por este casillero en ciclos/días anteriores se considera cerrada con stock
+                        const idxActual = circuitoJugo.indexOf(camaraActivaJugo);
+                        const idxCamara = circuitoJugo.indexOf(num);
+                        
+                        // Lógica visual de llenado acumulativo para la simulación de vueltas
+                        if (diaActual > circuitoJugo.length || idxCamara < idxActual) {
+                            bgColor = '#16a34a'; // Verde (Cerrada con stock)
+                            borderColor = '#15803d';
+                            txtColor = '#ffffff';
+                        }
+                    }
+                }
+                // 3. CÁMARAS DEL CIRCUITO NFC
+                else if (circuitoNFC.includes(num)) {
+                    if (num === camaraActivaNFC) {
+                        bgColor = '#38bdf8'; // Azul (Ingresando hoy)
+                        borderColor = '#0284c7';
+                        txtColor = '#ffffff';
+                        mostrarCamion = true;
+                    } else {
+                        const idxActual = circuitoNFC.indexOf(camaraActivaNFC);
+                        const idxCamara = circuitoNFC.indexOf(num);
+                        
+                        if (diaActual > circuitoNFC.length || idxCamara < idxActual) {
+                            bgColor = '#16a34a'; // Verde (Cerrada con stock)
+                            borderColor = '#15803d';
+                            txtColor = '#ffffff';
                         }
                     }
                 }
 
-                // Aplicación forzada de estilos dinámicos e inyección HTML
-                el.style.setProperty('background-color', bgColor, 'important');
-                el.style.setProperty('border-color', borderColor, 'important');
+                // Inyección limpia y directa en el elemento DOM
+                el.style.backgroundColor = bgColor;
+                el.style.borderColor = borderColor;
 
                 el.innerHTML = `
-                    <div style="line-height: 1.1; margin-top: 1px;">
-                        <span style="font-size: 8px; font-weight: 700; opacity: 0.6; display: block; color: #475569;">CÁMARA</span>
-                        <span style="font-size: 16px; font-weight: 900; color: #0f172a; display: block;">${num}</span>
-                    </div>
-                    <span class="badge-status" style="background-color: ${badgeColor};">${txtEstado}</span>
-                    <div style="line-height: 1.1; margin-bottom: 1px;">
-                        <span style="font-size: 9px; font-weight: 800; color: #1e293b; display: block;">${txtVolumen}</span>
-                        <span style="font-size: 11px; display: ${displayCamion}; margin-top: 1px;">🚚</span>
+                    <div style="color: ${txtColor};">
+                        <span style="font-size: 9px; font-weight: 700; opacity: 0.7; display: block; tracking-wider">CÁMARA</span>
+                        <span style="font-size: 22px; font-weight: 900; display: block; line-height: 1;">${num}</span>
+                        ${mostrarCamion ? '<span style="font-size: 14px; display: block; margin-top: 2px;">🚚</span>' : ''}
                     </div>
                 `;
             });
         }
 
         function advancedPaso() {
-            diaActualIndex = (diaActualIndex < datosDiasPrueba.length - 1) ? diaActualIndex + 1 : 0;
+            diaActual++;
             renderizarPantalla();
         }
 
         function retrocederPaso() {
-            if (diaActualIndex > 0) {
-                diaActualIndex--;
+            if (diaActual > 1) {
+                diaActual--;
                 renderizarPantalla();
             }
         }
 
         function reiniciarSimulacion() {
-            diaActualIndex = 0;
+            diaActual = 1;
             renderizarPantalla();
         }
 
+        // Renderizado inicial al cargar la página
         window.onload = function() {
             renderizarPantalla();
         };
